@@ -1,0 +1,78 @@
+#Base method/path
+/: 
+  controller: Base
+  action: index
+
+#Auth method/path
+/signup:
+  controller: Auth
+  action: renderSignup
+
+/login:
+  controller: Auth
+  action: renderLogin
+
+/addUser:
+  controller: Auth
+  action: signup
+
+/signinUser:
+  controller: Auth
+  action: signin
+
+/updateUser:
+  controller: Auth
+  action: updateUser
+
+/logout:
+  controller: Auth
+  action: logout
+
+/deleteUser:
+  controller: Auth
+  action: deleteUser
+
+/setAdmin:
+  controller: Auth
+  action: setAdminUser
+
+/profil:
+  controller: Auth
+  action: renderProfil
+
+/dashboard:
+  controller: Auth
+  action: renderDashboard
+
+/users:
+  controller: Auth
+  action: renderUsers
+
+/resetPassword:
+  controller: Auth
+  action: renderResetPassword
+
+/modifyPassword:
+  controller: Auth
+  action: renderModifyPassword
+
+/updatePassword:
+  controller: Auth
+  action: updatePassword
+
+/activation:
+  controller: EmailVerification
+  action: activateAccount
+
+/sendNewPassword:
+  controller: EmailVerification
+  action: sendResetPwdMail
+
+/createUser:
+  controller: Auth
+  action: createUser
+
+/signinUser:
+  controller: Auth
+  action: signin
+

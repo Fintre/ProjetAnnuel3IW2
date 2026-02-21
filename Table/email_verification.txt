@@ -1,0 +1,20 @@
+-- Table: public.email_verification
+
+-- DROP TABLE IF EXISTS public.email_verification;
+
+CREATE TABLE IF NOT EXISTS public.email_verification
+(
+    user_id integer NOT NULL,
+    token character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT email_verification_pkey PRIMARY KEY (user_id),
+    CONSTRAINT fk_user FOREIGN KEY (user_id)
+        REFERENCES public."user" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.email_verification
+    OWNER to devuser;
