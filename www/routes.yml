@@ -71,8 +71,9 @@
 /createUser:
   controller: Auth
   action: createUser
+  method: POST
 
 /signinUser:
   controller: Auth
   action: signin
-
+  method: POST
