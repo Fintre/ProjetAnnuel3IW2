@@ -5,10 +5,11 @@ services:
       dockerfile: Dockerfile
     container_name: php-apache
     ports:
-      - "8080:80" # Accès HTTP à Apache -> http://localhost:8080
+      - "1001:80" # Accès HTTP à Apache -> http://localhost:8080
     volumes:
       - ./www:/var/www/html:cached # ton code PHP (www/)
       - ./php.ini:/usr/local/etc/php/conf.d/custom.ini:ro
+      - .env:/var/www/html/.env:ro
     environment:
       - APACHE_LOG_DIR=/var/log/apache2
     depends_on:
@@ -26,7 +27,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
-      - "5432:5432" # optionnel, utile si tu veux te connecter depuis l'hôte
+      - "1002:5432" # optionnel, utile si tu veux te connecter depuis l'hôte
 
   pgadmin:
     image: dpage/pgadmin4:7
@@ -36,7 +37,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     ports:
-      - "5050:80" # Accès pgAdmin -> http://localhost:5050
+      - "1003:80" # Accès pgAdmin -> http://localhost:5050
     volumes:
       - pgadmin-data:/var/lib/pgadmin
     depends_on:
@@ -47,7 +48,7 @@ services:
     container_name: mailpit
     restart: unless-stopped
     ports:
-      - "8025:8025" # Interface web -> http://localhost:8025
+      - "1004:8025" # Interface web -> http://localhost:8025
       - "1025:1025" # Port SMTP
     environment:
       MP_MAX_MESSAGES: 5000
