@@ -1,24 +1,29 @@
 #Base method/path
-/: 
+/:
   controller: Base
   action: index
+  method: GET
 
 #Auth method/path
 /signup:
   controller: Auth
   action: renderSignup
+  method: GET
 
 /login:
   controller: Auth
   action: renderLogin
+  method: GET
 
 /addUser:
   controller: Auth
   action: signup
+  method: POST
 
 /signinUser:
   controller: Auth
   action: signin
+  method: POST
 
 /updateUser:
   controller: Auth
@@ -71,9 +76,4 @@
 /createUser:
   controller: Auth
   action: createUser
-  method: POST
-
-/signinUser:
-  controller: Auth
-  action: signin
   method: POST
