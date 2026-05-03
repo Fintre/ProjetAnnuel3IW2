@@ -8,7 +8,7 @@ class Database
     private \PDO $pdo;
     private function __construct(){  
         try{
-            $this->pdo = new \PDO("pgsql:host=db;port=5432;dbname=devdb","devuser", "devpass");
+            $this->pdo = new \PDO("pgsql:host=db;port=5432;dbname=" . getenv('POSTGRES_DB'),getenv('POSTGRES_USER'), getenv('POSTGRES_PASSWORD'));
         }catch(\PDOException $e){
             die("Erreur ".$e->getMessage());
         }
