@@ -181,11 +181,11 @@ class Auth extends Base
     }
 
     public function renderSignup(): void{
-        $this->renderPage("signup");
+        $this->renderPage("signup", "noHeader");
     }
 
     public function renderLogin(): void{
-         $this->renderPage("login");
+         $this->renderPage("login", "noHeader");
     }
 
     public function renderProfil(): void{
