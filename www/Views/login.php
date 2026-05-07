@@ -8,8 +8,8 @@
     </div>
 <?php endif; ?>
 
-<section class="login-page">
-    <div class="login-hero">
+<main class="login-page">
+    <section class="login-hero">
         <div class="login-hero-top">
             <a href="/" class="login-hero-logo">Roar<span class="login-hero-logo-accent">r.</span></a>
             <span class="login-hero-badge">CONNEXION</span>
@@ -26,16 +26,16 @@
         </div>
 
         <figure class="login-comment">
-            <blockquote class="login-comment-quote">
+            <p class="login-comment-quote">
                 « En trois mois, j'ai économisé 840 € sans m'en rendre compte. Roarr m'a juste montré où regarder. »
-            </blockquote>
-            <figcaption class="login-comment-author">
+            </p>
+            <div class="login-comment-author">
                 <span class="login-comment-avatar" aria-hidden="true">C</span>
                 <span class="login-comment-meta">
                     <span class="login-comment-name">Camille A.</span>
                     <span class="login-comment-role">UTILISATRICE DEPUIS FÉV. 2026</span>
                 </span>
-            </figcaption>
+            </div>
         </figure>
 
         <div class="login-hero-footer">
@@ -48,9 +48,9 @@
                 <span>Tous services opérationnels</span>
             </div>
         </div>
-    </div>
+    </section>
 
-    <main class="login-form-panel">
+    <section class="login-form-panel">
         <div class="login-form-wrap">
             <div class="login-form-header">
                 <h2 class="login-form-title">Se connecter</h2>
@@ -84,5 +84,5 @@
                 <span class="login-form-footer-item">EU RGPD</span>
             </div>
         </div>
-    </main>
-</section>
+    </section>
+</main>

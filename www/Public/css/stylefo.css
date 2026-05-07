@@ -496,8 +496,6 @@ h1 {
   gap: 0.25rem;
 }
 
-/* --- Left hero panel --- */
-
 .login-hero {
   background-color: var(--forest);
   color: var(--cream);
@@ -845,5 +843,360 @@ h1 {
 
   .login-form-panel {
     padding: 2.5rem 1.5rem;
+  }
+}
+
+.home {
+  background-color: var(--ivory);
+  font-family: var(--sans);
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+}
+
+.home-info {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 5.5rem;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  color: var(--ink);
+  opacity: 0.75;
+}
+
+.home-info-edition {
+  text-align: left;
+}
+
+.home-info-tagline {
+  text-align: center;
+}
+
+.home-info-locale {
+  text-align: right;
+}
+
+.home-hero {
+  padding: 3rem 5.5rem 3.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.home-hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  align-self: flex-start;
+  padding: 0.45rem 0.95rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+  background-color: var(--cream);
+}
+
+.home-hero-pill-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background-color: var(--amber);
+}
+
+.home-hero-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(3rem, 8.5vw, 7.5rem);
+  line-height: 0.98;
+  color: var(--ink);
+  margin: 0;
+  letter-spacing: -0.025em;
+  text-align: left;
+}
+
+.home-hero-title-em {
+  font-style: italic;
+  color: var(--forest);
+}
+
+.home-hero-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 4rem;
+  align-items: start;
+  margin-top: 1.5rem;
+}
+
+.home-hero-lead {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--ink);
+  max-width: 28rem;
+  margin: 0;
+}
+
+.home-hero-lead-em {
+  font-style: italic;
+  color: var(--forest);
+  font-weight: 500;
+}
+
+.home-hero-cta {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  align-items: stretch;
+  width: 100%;
+  max-width: 22rem;
+}
+
+.home-hero-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 1.75rem;
+  background-color: var(--ink);
+  color: var(--cream);
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition: background-color 0.15s ease;
+}
+
+.home-hero-btn:hover {
+  background-color: var(--forest-deep);
+}
+
+.home-hero-btn-arrow {
+  font-size: 1rem;
+}
+
+.home-hero-perks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  opacity: 0.65;
+}
+
+.home-hero-admin {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  color: var(--ink);
+  opacity: 0.4;
+  text-decoration: underline;
+  align-self: flex-start;
+}
+
+.home-hero-admin:hover {
+  opacity: 0.7;
+}
+
+.home-stats {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  padding: 1.25rem 5.5rem;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.home-stats-label {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  color: var(--ink);
+  opacity: 0.6;
+  white-space: nowrap;
+}
+
+.home-stats-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.home-stats-item {
+  font-family: var(--display);
+  font-size: 1rem;
+  color: var(--ink);
+  opacity: 0.85;
+  display: inline-flex;
+  align-items: center;
+}
+
+.home-stats-item:not(:last-child)::after {
+  content: "·";
+  margin: 0 1.25rem;
+  opacity: 0.5;
+}
+
+.home-method {
+  padding: 4rem 5.5rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.home-method-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2rem;
+}
+
+.home-method-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(2rem, 4.5vw, 3.75rem);
+  line-height: 1.05;
+  color: var(--ink);
+  margin: 0;
+  letter-spacing: -0.015em;
+  text-align: left;
+}
+
+.home-method-title-em {
+  font-style: italic;
+}
+
+.home-method-tag {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  color: var(--ink);
+  opacity: 0.55;
+  white-space: nowrap;
+}
+
+.home-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.home-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  padding: 2rem 1.75rem 2.25rem;
+  background-color: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+}
+
+.home-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.home-card-num {
+  font-family: var(--display);
+  font-size: 2.5rem;
+  font-weight: 400;
+  color: var(--amber);
+  line-height: 1;
+}
+
+.home-card-pill {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  color: var(--ink);
+  opacity: 0.65;
+}
+
+.home-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.home-card-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 1.65rem;
+  color: var(--ink);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.home-card-desc {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--ink);
+  opacity: 0.75;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .home-info {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 0.4rem;
+    padding: 1rem 1.5rem;
+  }
+
+  .home-info-edition,
+  .home-info-tagline,
+  .home-info-locale {
+    text-align: center;
+  }
+
+  .home-hero {
+    padding: 2.5rem 1.5rem 2.5rem;
+  }
+
+  .home-hero-row {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .home-stats {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .home-method {
+    padding: 3rem 1.5rem;
+  }
+
+  .home-method-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .home-cards {
+    grid-template-columns: 1fr;
   }
 }

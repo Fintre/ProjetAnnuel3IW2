@@ -8,8 +8,8 @@
     </div>
 <?php endif; ?>
 
-<section class="signup-page">
-    <div class="signup-hero">
+<main class="signup-page">
+    <section class="signup-hero">
         <div class="signup-hero-top">
             <a href="/" class="signup-hero-logo">Roar<span class="signup-hero-logo-accent">r.</span></a>
             <span class="signup-hero-badge">INSCRIPTION</span>
@@ -47,9 +47,9 @@
                 <span class="signup-hero-stat-label">UTILISATEURS</span>
             </div>
         </div>
-    </div>
+    </section>
 
-    <main class="signup-form-panel">
+    <section class="signup-form-panel">
         <div class="signup-form-wrap">
             <div class="signup-form-header">
                 <h2 class="signup-form-title">Créer un compte</h2>
@@ -92,8 +92,8 @@
                 <span class="signup-form-footer-item">EU RGPD</span>
             </div>
         </div>
-    </main>
-</section>
+    </section>
+</main>
 
     </form>
 </div>
