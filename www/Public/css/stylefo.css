@@ -572,6 +572,15 @@ h3 {
   font-size: var(--text-size-btn);
   font-weight: var(--weight-btn);
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.signup-submit-arrow {
+  width: 1.25rem;
+  height: auto;
 }
 
 .signup-form-alt {
@@ -860,6 +869,15 @@ h3 {
   font-size: var(--text-size-btn);
   font-weight: var(--weight-btn);
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.login-submit-arrow {
+  width: 1.25rem;
+  height: auto;
 }
 
 .login-form-alt {
@@ -913,7 +931,7 @@ h3 {
   }
   .signup {
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
   }
   .signup-hero,
   .signup-form {
@@ -921,7 +939,7 @@ h3 {
   }
   .login {
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
   }
   .login-hero,
   .login-form {
