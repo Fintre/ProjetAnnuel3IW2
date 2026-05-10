@@ -8,10 +8,10 @@
     </div>
 <?php endif; ?>
 
-<main class="signup-page">
+<main class="signup">
     <section class="signup-hero">
         <div class="signup-hero-top">
-            <a href="/" class="signup-hero-logo">Roar<span class="signup-hero-logo-accent">r.</span></a>
+            <a href="/" class="signup-hero-logo">Roar<span class="signup-hero-logo-color">r.</span></a>
             <span class="signup-hero-badge">INSCRIPTION</span>
         </div>
 
@@ -37,63 +37,58 @@
             </li>
         </ul>
 
-        <div class="signup-hero-footer">
+        <div class="signup-hero-foot">
             <div class="signup-hero-legal">
-                <span>DSP2 · AGRÉMENT ACPR</span>
-                <span>LECTURE SEULE · CHIFFREMENT AES-256</span>
+                <p>DSP2 · AGRÉMENT ACPR</p>
+                <p>LECTURE SEULE · CHIFFREMENT AES-256</p>
             </div>
             <div class="signup-hero-stat">
-                <span class="signup-hero-stat-num">24k+</span>
-                <span class="signup-hero-stat-label">UTILISATEURS</span>
+                <p class="signup-hero-stat-num">24k+</p>
+                <p class="signup-hero-stat-label">UTILISATEURS</p>
             </div>
         </div>
     </section>
 
-    <section class="signup-form-panel">
-        <div class="signup-form-wrap">
-            <div class="signup-form-header">
-                <h2 class="signup-form-title">Créer un compte</h2>
-                <p class="signup-form-sub">GRATUIT · SANS CB · 30 SECONDES</p>
-            </div>
-
-            <form method="POST" action="/addUser" class="signup-form">
-                <div class="signup-field">
-                    <label for="signup-name" class="signup-label">PRÉNOM</label>
-                    <input id="signup-name" class="signup-input" type="text" value="<?= $_POST["firstname"] ?? "" ?>" name="name" placeholder="Votre prénom">
-                </div>
-
-                <div class="signup-field">
-                    <label for="signup-email" class="signup-label">ADRESSE EMAIL</label>
-                    <input id="signup-email" class="signup-input" type="email" value="<?= $_POST["email"] ?? "" ?>" required name="email" placeholder="Votre email">
-                </div>
-
-                <div class="signup-field">
-                    <label for="signup-pwd" class="signup-label">MOT DE PASSE</label>
-                    <input id="signup-pwd" class="signup-input" type="password" required name="pwd" placeholder="Votre mot de passe">
-                </div>
-
-                <div class="signup-field">
-                    <label for="signup-pwd-confirm" class="signup-label">CONFIRMER LE MOT DE PASSE</label>
-                    <input id="signup-pwd-confirm" class="signup-input" type="password" required name="pwdConfirm" placeholder="Confirmation du mot de passe">
-                </div>
-
-                <input class="signup-submit" type="submit" value="Créer mon compte →">
-            </form>
-
-            <p class="signup-alt">
-                Déjà un compte ? <a href="/login" class="signup-link">Se connecter</a>
-            </p>
-
-            <div class="signup-form-footer">
-                <span class="signup-form-footer-item">SSL/TLS</span>
-                <span class="signup-form-footer-sep">·</span>
-                <span class="signup-form-footer-item">DSP2</span>
-                <span class="signup-form-footer-sep">·</span>
-                <span class="signup-form-footer-item">EU RGPD</span>
-            </div>
+    <section class="signup-form">
+        <div class="signup-form-head">
+            <h2 class="signup-form-title">Créer un compte</h2>
+            <p class="signup-form-sub">GRATUIT · SANS CB · 30 SECONDES</p>
         </div>
+
+        <form method="POST" action="/addUser" class="signup-fields">
+            <div class="signup-field">
+                <label for="signup-name" class="signup-field-label">PRÉNOM</label>
+                <input id="signup-name" class="signup-field-input" type="text" value="<?= $_POST["firstname"] ?? "" ?>" name="name" placeholder="Votre prénom">
+            </div>
+
+            <div class="signup-field">
+                <label for="signup-email" class="signup-field-label">ADRESSE EMAIL</label>
+                <input id="signup-email" class="signup-field-input" type="email" value="<?= $_POST["email"] ?? "" ?>" required name="email" placeholder="Votre email">
+            </div>
+
+            <div class="signup-field">
+                <label for="signup-pwd" class="signup-field-label">MOT DE PASSE</label>
+                <input id="signup-pwd" class="signup-field-input" type="password" required name="pwd" placeholder="Votre mot de passe">
+            </div>
+
+            <div class="signup-field">
+                <label for="signup-pwd-confirm" class="signup-field-label">CONFIRMER LE MOT DE PASSE</label>
+                <input id="signup-pwd-confirm" class="signup-field-input" type="password" required name="pwdConfirm" placeholder="Confirmation du mot de passe">
+            </div>
+
+            <input class="signup-submit" type="submit" value="Créer mon compte →">
+        </form>
+
+        <p class="signup-form-alt">
+            Déjà un compte ? <a href="/login" class="signup-form-link">Se connecter</a>
+        </p>
+
+        <ul class="signup-form-foot">
+            <li class="signup-form-foot-item">SSL/TLS</li>
+            <li class="signup-form-foot-point"></li>
+            <li class="signup-form-foot-item">DSP2</li>
+            <li class="signup-form-foot-point"></li>
+            <li class="signup-form-foot-item">EU RGPD</li>
+        </ul>
     </section>
 </main>
-
-    </form>
-</div>
