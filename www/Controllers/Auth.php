@@ -188,6 +188,10 @@ class Auth extends Base
          $this->renderPage("login", "noHeader");
     }
 
+    public function renderAbonnement(): void{
+        $this->renderPage("abonnement", "frontoffice");
+    }
+
     public function renderProfil(): void{
         $this->isAuth();
         $this->renderPage( "user", "backoffice");
