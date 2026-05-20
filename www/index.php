@@ -66,7 +66,7 @@ if ($currentMethod !== strtoupper($_SERVER['REQUEST_METHOD'])) {
 $access = $routes[$uri]["access"] ?? null;
 $isLoggedIn = isset($_SESSION["is_active"]) && $_SESSION["is_active"] === true;
 if ($access === "guest" && $isLoggedIn) {
-    header("Location: /dashboard");
+    header("Location: /profil");
     exit;
 }
 if ($access === "auth" && !$isLoggedIn) {
