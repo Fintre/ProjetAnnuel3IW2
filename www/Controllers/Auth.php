@@ -33,14 +33,14 @@ class Auth extends Base
                         $this->renderPage("dashboard");
                     } else {
                         $this->errors[]="Votre compte n'est pas encore activé";
-                        $this->renderPage("login", "frontoffice", ["errors" => $this->errors]);
+                        $this->renderPage("login", "headerFooter", ["errors" => $this->errors]);
                     } 
                 } else {
                         $this->errors[]="Mot de passe incorrect";
-                        $this->renderPage("login", "frontoffice", ["errors" => $this->errors]);
+                        $this->renderPage("login", "headerFooter", ["errors" => $this->errors]);
                     }
             } else {
-                $this->renderPage("login", "frontoffice", ["errors" => $this->errors]);
+                $this->renderPage("login", "headerFooter", ["errors" => $this->errors]);
             }  
         } else {
             echo "Tentative de XSS";
@@ -103,7 +103,7 @@ class Auth extends Base
             }
             $this->renderHome();
         } else {
-            $this->renderPage("signup", "frontoffice", ["errors" => $this->errors]);
+            $this->renderPage("signup", "headerFooter", ["errors" => $this->errors]);
         }
         }else{
             echo "Tentative de XSS";
@@ -136,7 +136,7 @@ class Auth extends Base
                 $this->setSessionData($value);
             }
         }
-        $this->renderPage("user", "backoffice");
+        $this->renderPage("userProfil", "headerFooter");
     }
 
     public function clearEmail($email){
@@ -189,12 +189,12 @@ class Auth extends Base
     }
 
     public function renderAbonnement(): void{
-        $this->renderPage("abonnement", "frontoffice");
+        $this->renderPage("abonnement", "headerFooter");
     }
 
     public function renderProfil(): void{
         $this->isAuth();
-        $this->renderPage( "user", "backoffice");
+        $this->renderPage( "userProfil", "headerFooter");
     }
 
     public function renderDashboard(): void {
@@ -219,7 +219,7 @@ class Auth extends Base
         $emailService = new EmailVerification();
         $token = isset($_GET["token"]) ? $_GET["token"] : null;
         $isActiveToken = $emailService->verifyIfTokenExist($token);
-        if($isActiveToken){ $this->renderPage("modifyPassword", "frontoffice"); }
+        if($isActiveToken){ $this->renderPage("modifyPassword", "headerFooter"); }
     }
 
     public function updatePassword() {
@@ -242,7 +242,7 @@ class Auth extends Base
             } 
             }else{
                 $_SESSION['error']="Mdp invalid";
-                $this->renderPage("modifyPassword", "frontoffice", ["errors" => $this->errors]);
+                $this->renderPage("modifyPassword", "headerFooter", ["errors" => $this->errors]);
             } 
         } else{
             echo "Tentative de XSS";

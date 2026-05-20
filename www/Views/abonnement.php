@@ -106,10 +106,4 @@
             </span>
         </a>
     </section>
-
-    <section class="abo-foot screen-size">
-        <span class="abo-foot-item">PAIEMENT SÉCURISÉ · STRIPE</span>
-        <span class="abo-foot-item abo-foot-item-mid">TVA INCLUSE</span>
-        <span class="abo-foot-item abo-foot-item-end">RÉSILIATION EN 1 CLIC</span>
-    </section>
 </main>
