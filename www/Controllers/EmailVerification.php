@@ -50,7 +50,7 @@ class EmailVerification extends Base
             $is_active = $verifiyMail->getIsActiveFromId($userId);
             if($is_active === false){
                 $this->errors[]= "Vous devez d'abord activer votre compte par mail";
-                $this->renderPage("resetPassword", "frontoffice", ["errors" => $this->errors]);
+                $this->renderPage("resetPassword", "headerFooter", ["errors" => $this->errors]);
             } else {
                 $token = hash("sha256", bin2hex(random_bytes(32)));
                 $emailVerificationService = new EmailVerificationService();
@@ -59,7 +59,7 @@ class EmailVerification extends Base
             }
         } else{
             $this->errors[]= "L'email n'existe pas en bdd";
-            $this->renderPage("resetPassword", "frontoffice", ["errors" => $this->errors]);
+            $this->renderPage("resetPassword", "headerFooter", ["errors" => $this->errors]);
         }
     }
 
