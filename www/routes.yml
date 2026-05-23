@@ -77,3 +77,12 @@
   controller: Auth
   action: createUser
   method: POST
+
+/createBankAccount:
+  controller: BankAccount
+  action: create
+  method: POST
+
+/formBankAccount:
+  controller: BankAccount
+  action: formCreate
