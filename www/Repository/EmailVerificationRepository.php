@@ -3,9 +3,9 @@
 namespace App\Repository;
 
 use App\Controller\Base;
-use App\Model\Account;
+use App\Model\EmailVerification;
 
-class EmailVerificationRepository extends Base
+class BankAccountRepository extends Base
 {
     protected string $table = 'account';
 

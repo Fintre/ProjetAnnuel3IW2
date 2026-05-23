@@ -97,7 +97,7 @@ class Auth extends Base
                 "token"=> $token,
             ];
                 $emailService = new EmailVerificationService();
-                $emailService->createUserToken($data);  
+                $emailService->createUserToken($data);
                 $emailController = new EmailVerification();
                 $emailController->sendVerificationMail($email, $token, "Veuillez activer votre compte", 'activation');
             }

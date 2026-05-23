@@ -58,7 +58,7 @@ class BankAccount extends Base
 
         $accounts = $this->repository->findByUser($this->getCurrentUserId());
 
-        $this->renderPage("accounts", "frontoffice", ['accounts' => $accounts]);
+        $this->renderPage("accounts", "headerFooter", ['accounts' => $accounts]);
     }
 
     public function show(int $id): void
@@ -71,7 +71,7 @@ class BankAccount extends Base
             return;
         }
 
-        $this->renderPage("account", "frontoffice", ['account' => $account]);
+        $this->renderPage("account", "headerFooter", ['account' => $account]);
     }
 
     public function update(int $id): void
