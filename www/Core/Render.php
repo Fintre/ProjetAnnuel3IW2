@@ -8,7 +8,7 @@ class Render{
     private string $pathTemplate;
     private array $data = [];
 
-    public function __construct($view, $template="frontoffice"){
+    public function __construct($view, $template="headerFooter"){
         $this->setView($view);
         $this->setTemplate($template);
     }

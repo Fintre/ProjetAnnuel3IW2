@@ -3,75 +3,104 @@
   controller: Base
   action: index
   method: GET
+  access: guest
+
+/abonnement:
+  controller: Auth
+  action: renderAbonnement
+  method: GET
 
 #Auth method/path
 /signup:
   controller: Auth
   action: renderSignup
   method: GET
+  access: guest
 
 /login:
   controller: Auth
   action: renderLogin
   method: GET
+  access: guest
 
 /addUser:
   controller: Auth
   action: signup
   method: POST
+  access: guest
 
 /signinUser:
   controller: Auth
   action: signin
   method: POST
+  access: guest
 
 /updateUser:
   controller: Auth
   action: updateUser
+  method: POST
+  access: auth
 
 /logout:
   controller: Auth
   action: logout
+  method: POST
+  access: auth
 
 /deleteUser:
   controller: Auth
   action: deleteUser
+  method: POST
+  access: auth
 
 /setAdmin:
   controller: Auth
   action: setAdminUser
+  method: POST
+  access: auth
 
 /profil:
   controller: Auth
   action: renderProfil
+  method: GET
+  access: auth
 
 /dashboard:
   controller: Auth
   action: renderDashboard
+  method: GET
+  access: auth
 
 /users:
   controller: Auth
   action: renderUsers
+  method: GET
+  access: auth
 
 /resetPassword:
   controller: Auth
   action: renderResetPassword
+  method: GET
 
 /modifyPassword:
   controller: Auth
   action: renderModifyPassword
+  method: GET
 
 /updatePassword:
   controller: Auth
   action: updatePassword
+  method: POST
 
 /activation:
   controller: EmailVerification
   action: activateAccount
+  method: GET
 
 /sendNewPassword:
   controller: EmailVerification
   action: sendResetPwdMail
+  method: POST
 
 /createUser:
   controller: Auth
@@ -86,3 +115,4 @@
 /formBankAccount:
   controller: BankAccount
   action: formCreate
+  access: auth

@@ -15,9 +15,9 @@ abstract class Base
     }
 
     public function index() {
-         $this->renderPage("home", "frontoffice");
+         $this->renderPage("home", "headerFooter");
     }
-    protected function renderPage(string $view, string $template = "frontoffice", array $data = []):void{
+    protected function renderPage(string $view, string $template = "headerFooter", array $data = []):void{
         $render = new Render($view, $template);  
         if(!empty($data)){
             foreach ($data as $key => $value){
@@ -28,7 +28,7 @@ abstract class Base
     }
 
     protected function renderHome(){
-        $render = new Render("home", "frontoffice");
+        $render = new Render("home", "headerFooter");
         $render->render();
     }
 

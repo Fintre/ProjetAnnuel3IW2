@@ -82,14 +82,15 @@ CREATE INDEX idx_subscription_user ON subscription(user_id);
 -- TABLE : account
 -- =============================================
 CREATE TABLE account (
-    id                   UUID         PRIMARY KEY DEFAULT uuid_generate_v4(),
-    user_id              INTEGER      NOT NULL,
-    short_name           VARCHAR(100) NOT NULL,
+    id                   UUID           PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id              INTEGER        NOT NULL,
+    short_name           VARCHAR(100)   NOT NULL,
     description          TEXT,
-    creation_date        DATE         NOT NULL,
-    annual_interest_rate NUMERIC(5,2) DEFAULT 0,
-    tax_rate             NUMERIC(5,2) DEFAULT 0,
-    registered_at        TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+    creation_date        DATE           NOT NULL,
+    annual_interest_rate NUMERIC(5,2)   DEFAULT 0,
+    tax_rate             NUMERIC(5,2)   DEFAULT 0,
+    registered_at        TIMESTAMP      DEFAULT CURRENT_TIMESTAMP,
+    solde                DECIMAL(15, 2) DEFAULT 0.00,
 
     CONSTRAINT fk_account_user
         FOREIGN KEY (user_id)

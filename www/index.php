@@ -59,7 +59,19 @@ $action = $routes[$uri]["action"];
 
 $currentMethod = $routes[$uri]["method"];
 if ($currentMethod !== strtoupper($_SERVER['REQUEST_METHOD'])) {
-    die("Erreur, la method n'est pas valide");
+    header("Location: /");
+    exit;
+}
+
+$access = $routes[$uri]["access"] ?? null;
+$isLoggedIn = isset($_SESSION["is_active"]) && $_SESSION["is_active"] === true;
+if ($access === "guest" && $isLoggedIn) {
+    header("Location: /profil");
+    exit;
+}
+if ($access === "auth" && !$isLoggedIn) {
+    header("Location: /");
+    exit;
 }
 
 if (!file_exists("Controllers/".$controller.".php")) {

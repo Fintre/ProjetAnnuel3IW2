@@ -7,18 +7,45 @@
   --line: rgba(26, 26, 23, 0.12);
   --line-2: rgba(26, 26, 23, 0.06);
 
-  --forest: #1f3d2e;
+  --forest: #05482f;
   --forest-deep: #142820;
-  --amber: #d97a2c;
+  --amber: #d35220;
   --amber-soft: #e89858;
-  --gold: #c8a04a;
+  --gold: #d4a541;
   --plum: #4a2438;
 
   --display: "Fraunces", "Times New Roman", serif;
   --sans: "Geist", -apple-system, system-ui, sans-serif;
   --mono: "Geist Mono", "SF Mono", monospace;
 
-  --size: 0 10%;
+  --size-desktop: 0 5%;
+  --size-tablet: 0 2.5%;
+
+  --text-size-big: 7.5rem;
+  --text-size-h1: 5.5rem;
+  --text-size-h2: 3.4rem;
+  --text-size-l: 1.4rem;
+  --text-size-m: 1.1rem;
+  --text-size-s: 0.78rem;
+  --text-size-btn: 0.95rem;
+
+  --weight-title: 500;
+  --weight-btn: 500;
+}
+
+.btn {
+  width: fit-content;
+  border-radius: 60rem;
+  color: var(--cream);
+  font-family: var(--sans);
+  font-size: var(--text-size-btn);
+  font-weight: var(--weight-btn);
+  padding: 0.5rem 2rem;
+  cursor: pointer;
+}
+
+.screen-size {
+  padding: var(--size-desktop);
 }
 
 .txt-cream {
@@ -45,9 +72,15 @@ ul {
   padding: 0;
   margin: 0;
 }
+h2 {
+  margin: 0;
+}
+
+h3 {
+  margin: 0;
+}
 
 .header {
-  padding: var(--size);
   display: grid;
   align-items: center;
   grid-template-columns: repeat(12, 1fr);
@@ -64,7 +97,7 @@ ul {
 }
 
 .header-logo-color {
-  color: var(--gold);
+  color: var(--amber);
 }
 
 .header-auth {
@@ -87,6 +120,24 @@ ul {
   display: flex;
   column-gap: 2rem;
   grid-column: span 6;
+  align-items: center;
+}
+.header-svg {
+  width: 2.4rem;
+  display: block;
+}
+
+.header-logout {
+  margin: 0;
+}
+
+.header-logout-btn {
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
 .header-ul-link {
@@ -109,42 +160,1330 @@ ul {
   color: var(--ivory);
 }
 
-h1 {
-  text-align: center;
+.home-info {
+  font-size: var(--text-size-s);
+  font-family: var(--mono);
+  align-items: center;
+  height: 3rem;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  letter-spacing: 0.18em;
+  color: var(--ink);
+}
+.home-info-col {
+  grid-column: span 4;
+}
+.home-info-tagline {
+  justify-self: center;
 }
 
-.home {
+.home-info-locale {
+  justify-self: end;
+}
+.home-hero {
+  padding-top: 3rem;
+}
+
+.home-hero-pill {
+  border: 1px solid var(--line);
+  background-color: var(--cream);
+  border-radius: 20rem;
+  display: flex;
+  align-items: center;
+  padding: 0.45rem 0.95rem;
+  width: fit-content;
+  font-family: var(--mono);
+  gap: 0.5rem;
+  font-size: var(--text-size-s);
+}
+
+.home-hero-pill-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background-color: var(--amber);
+}
+
+.home-hero-title {
+  padding-top: 2rem;
+  font-family: var(--display);
+  font-size: var(--text-size-big);
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin: 0;
+  font-weight: var(--weight-title);
+  line-height: 0.98;
+  font-style: italic;
+}
+
+.home-hero-title-em {
+  color: var(--amber);
+}
+
+.home-hero-row {
+  padding-top: 5rem;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+}
+.home-hero-lead-em {
+  color: var(--amber);
+}
+
+.home-hero-lead {
+  line-height: 1.55;
+  font-size: var(--text-size-l);
+  font-family: var(--sans);
+  max-width: 40rem;
+  grid-column: span 6;
+  color: var(--ink);
+}
+
+.home-hero-cta {
+  grid-column: span 6;
   display: flex;
   flex-direction: column;
 }
 
-.form {
+.home-hero-btn {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.home-hero-arrow {
+  width: 2rem;
+  height: auto;
+}
+
+.home-hero-perks {
+  display: grid;
+  max-width: 27rem;
+  padding-top: 1.5rem;
+  grid-template-columns: repeat(12, 1fr);
+}
+
+.home-hero-perks li {
+  grid-column: span 6;
+  font-size: var(--text-size-s);
+  font-family: var(--mono);
+  height: 2.5rem;
+  letter-spacing: 0.18em;
+  color: var(--ink);
+}
+
+.home-stats {
+  border-bottom: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+  gap: 2rem;
+  display: flex;
+  height: 4rem;
+  align-items: center;
+  margin-top: 4rem;
+}
+
+.home-stats-list {
+  color: var(--ink);
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  font-size: var(--text-size-m);
+  font-family: var(--display);
+}
+.home-stats-label {
+  letter-spacing: 0.18em;
+}
+.home-stats-item-point {
+  background-color: var(--ink);
+  width: 0.2rem;
+  height: 0.2rem;
+  border-radius: 60rem;
+}
+
+.home-method {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.home-method-head {
+  padding-bottom: 3rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.home-method-title {
+  color: var(--ink);
+  font-family: var(--display);
+  font-weight: var(--weight-title);
+  font-size: var(--text-size-h2);
+}
+
+.home-method-title-em {
+  font-style: italic;
+  color: var(--amber);
+}
+
+.home-method-tag {
+  font-size: var(--text-size-s);
+  color: var(--ink);
+  font-family: var(--mono);
+}
+
+.home-cards {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1rem;
+}
+
+.home-card {
+  padding: 2rem 3rem;
   display: flex;
   flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background-color: var(--cream);
+  grid-column: span 4;
+  gap: 4rem;
+}
+.home-card-head {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
 }
-.form input {
-  margin-top: 2rem;
-  padding: 0.5rem;
+.home-card-num {
+  font-family: var(--display);
+  font-size: 2.5rem;
+  font-weight: var(--weight-title);
+  color: var(--amber);
+  line-height: 1;
 }
 
-.btn {
-  color: white;
+.home-card-pill {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 50rem;
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  color: var(--ink);
 }
 
-.btn_green {
-  background-color: green;
+.home-card-title {
+  font-family: var(--display);
+  font-weight: var(--weight-title);
+  font-size: var(--text-size-l);
+  color: var(--ink);
+  letter-spacing: -0.01em;
 }
 
-.btn_red {
-  background-color: rgb(206, 34, 34);
-}
-
-.center {
-  text-align: center;
-}
-
-.isActiveNav {
+.home-card-body {
   display: flex;
   flex-direction: column;
+  gap: 1rem;
+}
+
+.home-card-desc {
+  font-size: var(--text-size-m);
+  line-height: 1.55;
+  color: var(--ink-2);
+  font-family: var(--sans);
+}
+
+.signup {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  min-height: 100vh;
+}
+
+.signup-errors {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--plum);
+  color: var(--cream);
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem;
+  font-family: var(--sans);
+  font-size: var(--text-size-s);
+}
+
+.signup-hero {
+  grid-column: span 6;
+  background-color: var(--forest);
+  padding: 2.5rem 4rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.signup-hero-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 3.5rem;
+}
+
+.signup-hero-logo {
+  font-family: var(--display);
+  font-size: 1.85rem;
+  font-style: italic;
+  color: var(--cream);
+}
+
+.signup-hero-logo-color {
+  color: var(--amber);
+}
+
+.signup-hero-badge {
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  color: var(--cream);
+  padding-top: 0.6rem;
+}
+
+.signup-hero-title {
+  font-family: var(--display);
+  font-size: var(--text-size-h1);
+  font-weight: var(--weight-title);
+  color: var(--cream);
+  letter-spacing: -0.025em;
+  line-height: 0.98;
+  margin: 0;
+}
+
+.signup-hero-title-em {
+  font-style: italic;
+  color: var(--amber);
+}
+
+.signup-hero-list {
+  margin-top: auto;
+  padding-top: 3rem;
+  border-top: 1px solid rgba(245, 241, 232, 0.18);
+}
+
+.signup-hero-item {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  padding: 1.4rem 0;
+  border-bottom: 1px solid rgba(245, 241, 232, 0.18);
+  font-family: var(--sans);
+  font-size: var(--text-size-m);
+  color: var(--cream);
+}
+
+.signup-hero-num {
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.05em;
+  color: var(--cream);
+}
+
+.signup-hero-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-top: 2.5rem;
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  color: var(--cream);
+}
+
+.signup-hero-legal {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.signup-hero-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.2rem;
+  color: var(--amber);
+}
+
+.signup-hero-stat-num {
+  font-family: var(--display);
+  font-size: 2.25rem;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.signup-hero-stat-label {
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+}
+
+.signup-form {
+  grid-column: span 6;
+  padding: 2.5rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.signup-form-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.signup-form-title {
+  font-family: var(--display);
+  font-size: var(--text-size-h2);
+  font-weight: var(--weight-title);
+  color: var(--ink);
+  letter-spacing: -0.015em;
+}
+
+.signup-form-sub {
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  color: var(--ink);
+}
+
+.signup-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.signup-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.signup-field-label {
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  color: var(--ink);
+}
+
+.signup-field-input {
+  background-color: var(--ivory-2);
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  padding: 0.85rem 1rem;
+  font-family: var(--sans);
+  font-size: var(--text-size-m);
+  color: var(--ink);
+}
+
+.signup-submit {
+  margin-top: 0.75rem;
+  background-color: var(--ink);
+  color: var(--cream);
+  border: none;
+  border-radius: 60rem;
+  padding: 1rem 1.5rem;
+  font-family: var(--sans);
+  font-size: var(--text-size-btn);
+  font-weight: var(--weight-btn);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.signup-submit-arrow {
+  width: 1.25rem;
+  height: auto;
+}
+
+.signup-form-alt {
+  text-align: center;
+  font-family: var(--sans);
+  font-size: var(--text-size-m);
+  color: var(--ink);
+}
+
+.signup-form-link {
+  color: var(--ink);
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.signup-form-foot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.7rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  color: var(--ink);
+}
+
+.signup-form-foot-point {
+  background-color: var(--ink);
+  width: 0.2rem;
+  height: 0.2rem;
+  border-radius: 60rem;
+}
+
+.login {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  min-height: 100vh;
+}
+
+.login-errors {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--plum);
+  color: var(--cream);
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem;
+  font-family: var(--sans);
+  font-size: var(--text-size-s);
+}
+
+.login-hero {
+  grid-column: span 6;
+  background-color: var(--forest);
+  padding: 2.5rem 4rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-hero-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 3rem;
+}
+
+.login-hero-logo {
+  font-family: var(--display);
+  font-size: 1.85rem;
+  font-style: italic;
+  color: var(--cream);
+}
+
+.login-hero-logo-color {
+  color: var(--amber);
+}
+
+.login-hero-badge {
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  color: var(--cream);
+  padding-top: 0.6rem;
+}
+
+.login-hero-eyebrow {
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  color: var(--amber);
+  padding-bottom: 1.25rem;
+}
+
+.login-hero-title {
+  font-family: var(--display);
+  font-size: var(--text-size-h1);
+  font-weight: var(--weight-title);
+  color: var(--cream);
+  letter-spacing: -0.025em;
+  line-height: 0.98;
+  margin: 0;
+}
+
+.login-hero-title-em {
+  font-style: italic;
+  color: var(--amber);
+}
+
+.login-hero-quote {
+  margin-top: auto;
+  padding-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  border-top: 1px solid rgba(245, 241, 232, 0.18);
+}
+
+.login-hero-quote-text {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: var(--text-size-m);
+  line-height: 1.5;
+  color: var(--cream);
+}
+
+.login-hero-quote-author {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.login-hero-quote-avatar {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 60rem;
+  background-color: var(--amber);
+  color: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: var(--weight-title);
+}
+
+.login-hero-quote-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.login-hero-quote-name {
+  font-family: var(--sans);
+  font-size: var(--text-size-s);
+  font-weight: 600;
+  color: var(--cream);
+}
+
+.login-hero-quote-role {
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  color: var(--cream);
+}
+
+.login-hero-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 2.5rem;
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  color: var(--cream);
+}
+
+.login-hero-legal {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.login-hero-status {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 1rem;
+  border-radius: 60rem;
+  border: 1px solid rgba(245, 241, 232, 0.2);
+  font-family: var(--sans);
+  font-size: var(--text-size-s);
+  letter-spacing: 0;
+  color: var(--cream);
+}
+
+.login-hero-status-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 60rem;
+  background-color: #6cc28a;
+}
+
+.login-form {
+  justify-content: center;
+  grid-column: span 6;
+  padding: 2.5rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.login-form-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.login-form-title {
+  font-family: var(--display);
+  font-size: var(--text-size-h2);
+  font-weight: var(--weight-title);
+  color: var(--ink);
+  letter-spacing: -0.015em;
+}
+
+.login-form-sub {
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  color: var(--ink);
+}
+
+.login-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.login-field-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.login-field-label {
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  color: var(--ink);
+}
+
+.login-field-forgot {
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  color: var(--amber);
+}
+
+.login-field-input {
+  background-color: var(--ivory-2);
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  padding: 0.85rem 1rem;
+  font-family: var(--sans);
+  font-size: var(--text-size-m);
+  color: var(--ink);
+}
+
+.login-submit {
+  margin-top: 0.75rem;
+  background-color: var(--ink);
+  color: var(--cream);
+  border: none;
+  border-radius: 60rem;
+  padding: 1rem 1.5rem;
+  font-family: var(--sans);
+  font-size: var(--text-size-btn);
+  font-weight: var(--weight-btn);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.login-submit-arrow {
+  width: 1.25rem;
+  height: auto;
+}
+
+.login-form-alt {
+  text-align: center;
+  font-family: var(--sans);
+  font-size: var(--text-size-m);
+  color: var(--ink);
+}
+
+.login-form-link {
+  color: var(--ink);
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.login-form-foot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.7rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  color: var(--ink);
+}
+
+.login-form-foot-point {
+  background-color: var(--ink);
+  width: 0.2rem;
+  height: 0.2rem;
+  border-radius: 60rem;
+}
+
+.abonnement {
+  padding-bottom: 4rem;
+}
+
+.abo-head {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.abo-head-tag {
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  color: var(--amber);
+}
+
+.abo-head-title {
+  padding-top: 1.25rem;
+  font-family: var(--display);
+  font-weight: var(--weight-title);
+  font-size: var(--text-size-big);
+  letter-spacing: -0.025em;
+  line-height: 1;
+  color: var(--ink);
+  margin: 0;
+}
+
+.abo-head-title-em {
+  font-style: italic;
+  color: var(--amber);
+}
+
+.abo-head-lead {
+  padding-top: 2rem;
+  font-family: var(--sans);
+  font-size: var(--text-size-l);
+  line-height: 1.55;
+  color: var(--ink-2);
+  max-width: 36rem;
+}
+
+.abo-plans {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.5rem;
+}
+
+.abo-card {
+  position: relative;
+  grid-column: span 6;
+  border-radius: 1.25rem;
+  border: 1px solid var(--line);
+  padding: 2.5rem 2.75rem;
+  display: flex;
+  flex-direction: column;
+  color: inherit;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.abo-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0.75rem 1.5rem rgba(26, 26, 23, 0.08);
+}
+
+.abo-card:hover .abo-card-btn {
+  background-color: var(--amber-soft);
+}
+
+.abo-card-dark {
+  background-color: var(--ink);
+  color: var(--cream);
+  border-color: var(--ink);
+}
+
+.abo-card-light {
+  background-color: var(--cream);
+  color: var(--ink);
+}
+
+.abo-card-badge {
+  position: absolute;
+  top: -0.85rem;
+  left: 2rem;
+  background-color: var(--amber);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  padding: 0.4rem 0.9rem;
+  border-radius: 0.4rem;
+}
+
+.abo-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.abo-card-name {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: var(--weight-title);
+  font-size: 2.25rem;
+  letter-spacing: -0.015em;
+}
+
+.abo-card-name-em {
+  font-style: italic;
+  color: var(--amber);
+}
+
+.abo-card-num {
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  opacity: 0.55;
+  padding-top: 0.75rem;
+}
+
+.abo-card-sub {
+  padding-top: 1rem;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: var(--text-size-l);
+  opacity: 0.85;
+}
+
+.abo-card-price {
+  padding-top: 2.25rem;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.abo-card-price-num {
+  font-family: var(--display);
+  font-size: 4.5rem;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.abo-card-price-period {
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  padding-bottom: 0.85rem;
+  opacity: 0.7;
+}
+
+.abo-card-billing {
+  padding-top: 0.75rem;
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  opacity: 0.7;
+}
+
+.abo-card-features {
+  margin-top: 1.75rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.abo-card-dark .abo-card-features {
+  border-top-color: rgba(245, 241, 232, 0.18);
+}
+
+.abo-card-feature {
+  display: flex;
+  align-items: baseline;
+  gap: 0.85rem;
+  font-family: var(--sans);
+  font-size: var(--text-size-m);
+  line-height: 1.45;
+}
+
+.abo-card-feature-dash {
+  color: var(--amber);
+}
+
+.abo-card-feature-em {
+  color: var(--amber);
+  font-weight: 600;
+}
+
+.abo-card-feature-strong {
+  font-weight: 600;
+}
+
+.abo-card-feature-muted {
+  font-style: italic;
+  opacity: 0.55;
+}
+
+.abo-card-btn {
+  margin-top: 2.5rem;
+  background-color: var(--amber);
+  color: var(--cream);
+  border-radius: 60rem;
+  padding: 1rem 1.75rem;
+  font-family: var(--sans);
+  font-size: var(--text-size-btn);
+  font-weight: var(--weight-btn);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.abo-card-btn:hover {
+  background-color: var(--amber-soft);
+}
+
+.abo-card-arrow {
+  width: 1.25rem;
+  height: auto;
+}
+
+.abo-foot {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  color: var(--ink);
+}
+
+.abo-foot-item-mid {
+  justify-self: center;
+}
+
+.abo-foot-item-end {
+  justify-self: end;
+}
+
+.profil {
+  padding-bottom: 4rem;
+}
+
+.profil-head {
+  padding-top: 3rem;
+  padding-bottom: 2.5rem;
+}
+
+.profil-head-tag {
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  color: var(--ink);
+  opacity: 0.6;
+}
+
+.profil-head-title {
+  padding-top: 0.85rem;
+  margin: 0;
+  font-family: var(--display);
+  font-weight: var(--weight-title);
+  font-size: var(--text-size-h1);
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+
+.profil-body {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+.profil-side {
+  grid-column: span 3;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.profil-icon {
+  width: 2rem;
+}
+
+.profil-side-user {
+  background-color: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.profil-side-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 60rem;
+  background-color: var(--forest);
+  color: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: var(--weight-title);
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.profil-side-user-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  overflow: hidden;
+}
+
+.profil-side-user-name {
+  font-family: var(--sans);
+  font-size: var(--text-size-m);
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.profil-side-user-email {
+  font-family: var(--sans);
+  font-size: var(--text-size-s);
+  color: var(--ink-2);
+  opacity: 0.6;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profil-side-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.profil-side-link {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.8rem 1rem;
+  border-radius: 0.6rem;
+  font-family: var(--sans);
+  font-size: var(--text-size-m);
+  color: var(--ink);
+}
+
+.profil-side-link:hover {
+  background-color: var(--ivory-2);
+}
+
+.profil-side-link-active,
+.profil-side-link-active:hover {
+  background-color: var(--ink);
+  color: var(--cream);
+}
+
+.profil-side-icon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.profil-side-plan {
+  background-color: var(--ivory-2);
+  border-radius: 0.85rem;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-top: 1rem;
+}
+
+.profil-side-plan-label {
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  color: var(--ink);
+  opacity: 0.55;
+}
+
+.profil-side-plan-name {
+  font-family: var(--display);
+  font-size: 1.35rem;
+  color: var(--ink);
+  font-weight: var(--weight-title);
+}
+
+.profil-side-plan-price {
+  font-family: var(--sans);
+  font-size: var(--text-size-s);
+  color: var(--ink-2);
+  opacity: 0.7;
+}
+
+.profil-main {
+  grid-column: span 9;
+  background-color: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  padding: 2.25rem 2.75rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.profil-main-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding-bottom: 1.5rem;
+}
+
+.profil-main-title {
+  font-family: var(--display);
+  font-weight: var(--weight-title);
+  font-size: var(--text-size-h2);
+  color: var(--ink);
+  letter-spacing: -0.015em;
+}
+
+.profil-main-sub {
+  font-family: var(--sans);
+  font-size: var(--text-size-m);
+  color: var(--ink-2);
+  opacity: 0.7;
+}
+
+.profil-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.profil-field {
+  display: grid;
+  grid-template-columns: 11rem 1fr auto;
+  align-items: center;
+  gap: 2rem;
+  padding: 1.4rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.profil-field-label {
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  color: var(--ink);
+  opacity: 0.7;
+}
+
+.profil-field-input {
+  background: none;
+  border: none;
+  font-family: var(--sans);
+  font-size: var(--text-size-m);
+  color: var(--ink);
+  padding: 0.25rem 0;
+  outline: none;
+  width: 100%;
+}
+
+.profil-field-input:focus {
+  border-bottom: 1px solid var(--ink);
+}
+
+.profil-field-btn {
+  background: none;
+  border: none;
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  color: var(--ink);
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0.25rem;
+}
+
+@media (max-width: 1150px) {
+  .screen-size {
+    padding: var(--size-tablet);
+  }
+}
+
+@media (max-width: 1000px) {
+  .home-cards {
+    display: flex;
+    flex-direction: column;
+  }
+  .home-hero-row {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+  .signup {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .signup-hero,
+  .signup-form {
+    padding: 2rem 1.5rem;
+  }
+  .login {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .login-hero,
+  .login-form {
+    padding: 2rem 1.5rem;
+  }
+  .abo-plans {
+    display: flex;
+    flex-direction: column;
+  }
+  .abo-card {
+    padding: 2rem 1.5rem;
+  }
+  .abo-foot {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
+  }
+  .abo-foot-item-mid,
+  .abo-foot-item-end {
+    justify-self: auto;
+  }
+  .profil-body {
+    display: flex;
+    flex-direction: column;
+  }
+  .profil-side,
+  .profil-main {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .profil-main {
+    padding: 1.5rem 1.25rem;
+  }
+  .profil-field {
+    grid-template-columns: 1fr auto;
+    gap: 0.75rem 1rem;
+  }
+  .profil-field-label {
+    grid-column: 1 / -1;
+  }
 }
