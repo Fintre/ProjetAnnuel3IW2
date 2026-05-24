@@ -116,3 +116,8 @@
   controller: BankAccount
   action: formCreate
   access: auth
+
+/testUser:
+  controller: Auth
+  action: getUser
+  method: GET

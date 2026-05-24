@@ -7,7 +7,8 @@ use App\Model\User;
 
 class UserRepository extends Base 
 {
-    protected string $table = 'user';
+    protected string $table = '"user"';
+    protected array $validColumns = ['id', 'name', 'last_name', 'email', 'is_admin', 'is_active'];
 
     public function create(User $user): string|false {
         return $this->dbInsert($this->table, [
@@ -32,4 +33,9 @@ class UserRepository extends Base
             'is_admin' => $user->getIsAdmin(),
         ], $user->getId());
     }
+
+    public function getAlldata(): array {
+        return $this->dbFindByColumns($this->table, ['id', 'name']);
+    }
+
 }
