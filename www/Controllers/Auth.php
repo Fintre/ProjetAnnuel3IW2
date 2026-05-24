@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Controller\Base;
 use App\Service\AuthService;
+use App\Repository\UserRepository;
 use App\Service\EmailVerificationService;
 use App\Controller\EmailVerification;
 
@@ -97,7 +98,7 @@ class Auth extends Base
                 "token"=> $token,
             ];
                 $emailService = new EmailVerificationService();
-                $emailService->createUserToken($data);  
+                $emailService->createUserToken($data);
                 $emailController = new EmailVerification();
                 $emailController->sendVerificationMail($email, $token, "Veuillez activer votre compte", 'activation');
             }
@@ -261,6 +262,17 @@ class Auth extends Base
         if($pwd != $pwdConfirm){ 
             $this->errors[]="Votre mot de passe de confirmation ne correspond pas";
         }  
+    }
+
+
+    public function getUser(){
+        $userRepository = new UserRepository();
+        $result = $userRepository->getAlldata();
+        
+        echo "<pre>";
+        var_dump($result);
+        echo "</pre>";
+        exit;
     }
 }
 

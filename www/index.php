@@ -7,8 +7,8 @@ session_start();
 spl_autoload_register(
     function ($class) {
         $namespaceArray = [
-                            "namespace" => ["App\\Controller\\", "App\\Core\\", "App\\Model\\", "App\\Service\\"],
-                            "path" => ["Controllers/", "Core/", "Models/", "Services/"],
+                            "namespace" => ["App\\Controller\\", "App\\Core\\", "App\\Model\\", "App\\Service\\", "App\\Repository\\"],
+                            "path" => ["Controllers/", "Core/", "Models/", "Services/", "Repository/"],
                         ];
         $filname = str_ireplace($namespaceArray['namespace'], $namespaceArray['path'], $class). ".php";
         if (file_exists($filname)) {

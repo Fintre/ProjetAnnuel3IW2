@@ -76,7 +76,7 @@ class EmailVerification extends Base
                 $this->setSessionData($userData);
             }
             $this->renderPage("dashboard", "backoffice");
-        } 
+        }
     }
 
     public function verifyIfTokenExist($token){
