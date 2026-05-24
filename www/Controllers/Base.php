@@ -8,6 +8,7 @@ use App\Core\Database;
 abstract class Base
 {
     protected Database $db;
+    protected array $validColumns = [];
 
     public function __construct()
     {
@@ -127,6 +128,38 @@ abstract class Base
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
+    protected function dbFindByColumns(string $table, array $columns, string $orderBy = null): array {
+        $this->validateColumns($columns);
+        $cols = implode(', ', $columns);
+        $sql = "SELECT {$cols} FROM {$table}";
+        if ($orderBy) {
+            $sql .= " ORDER BY {$orderBy}";
+        }
+
+        $stmt = $this->db->getConnection()->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+
+    /*
+    protected function dbFindByColumnsWhere(string $table, array $columns, array $criteria, string $orderBy = null): array {
+        $this->validateColumns($columns);
+        $cols = implode(', ', $columns);
+        $conditions = implode(' AND ', array_map(fn($k) => "{$k} = :{$k}", array_keys($criteria)));
+        $sql = "SELECT {$cols} FROM {$table}";
+        if ($orderBy) {
+            $sql .= " ORDER BY {$orderBy}";
+        }
+
+        $stmt = $this->db->getConnection()->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+    */
+
 
     protected function dbUpdate(string $table, array $data, int $id): bool
     {
@@ -148,6 +181,15 @@ abstract class Base
         );
 
         return $stmt->execute([':id' => $id]);
+    }
+
+    protected function validateColumns(array $columns): void {
+        $invalid = array_diff($columns, $this->validColumns);
+        if (!empty($invalid)) {
+            throw new \InvalidArgumentException(
+                "Colonnes interdites : " . implode(', ', $invalid)
+            );
+        }
     }
 
 }
