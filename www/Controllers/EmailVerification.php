@@ -75,7 +75,7 @@ class EmailVerification extends Base
                 $userData = $auth->getUserDataFromId($userId);
                 $this->setSessionData($userData);
             }
-            $this->renderPage("dashboard", "backoffice");
+            $this->renderPage("userProfil");
         }
     }
 

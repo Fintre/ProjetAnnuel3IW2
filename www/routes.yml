@@ -64,12 +64,6 @@
   method: GET
   access: auth
 
-/dashboard:
-  controller: Auth
-  action: renderDashboard
-  method: GET
-  access: auth
-
 /users:
   controller: Auth
   action: renderUsers
@@ -115,8 +109,3 @@
   controller: BankAccount
   action: formCreate
   access: auth
-
-/testUser:
-  controller: Auth
-  action: getUser
-  method: GET
