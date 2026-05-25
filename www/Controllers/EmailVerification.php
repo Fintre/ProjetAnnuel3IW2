@@ -81,12 +81,12 @@ class EmailVerification extends Base
 
     public function verifyIfTokenExist($token){
         if (!isset($token)) {
-            $this->renderHome();
+            $this->renderPage("home", "headerFooter");
         } else{
             $emailService = new EmailVerificationService();
             $tokenExist = $emailService->getUserIdFromToken($token);
             if(!$tokenExist){
-                $this->renderHome();
+                $this->renderPage("home", "headerFooter");
             } else{
                 return true;
             }

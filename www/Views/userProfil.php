@@ -9,7 +9,7 @@
             <div class="profil-side-user">
                 <span class="profil-side-avatar"><svg class="profil-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="#faf6ec" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="#faf6ec" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></span>
                 <div class="profil-side-user-meta">
-                    <p class="profil-side-user-name"><?= $_SESSION["name"] ?? "" ?> <?= $_SESSION["lastname"] ?? "" ?></p>
+                    <p class="profil-side-user-name"><?= $_SESSION["name"] ?? "" ?> <?= $_SESSION["last_name"] ?? "" ?></p>
                     <p class="profil-side-user-email"><?= $_SESSION["email"] ?? "" ?></p>
                 </div>
             </div>
@@ -55,7 +55,7 @@
                 </div>
                 <div class="profil-field">
                     <span class="profil-field-label">NOM</span>
-                    <input class="profil-field-input" type="text" name="lastname" value="<?= $_SESSION["lastname"] ?? "" ?>" placeholder="Votre nom de famille">
+                    <input class="profil-field-input" type="text" name="lastname" value="<?= $_SESSION["last_name"] ?? "" ?>" placeholder="Votre nom de famille">
                     <button type="submit" class="profil-field-btn">MODIFIER</button>
                 </div>
                 <div class="profil-field">
@@ -63,6 +63,22 @@
                     <input class="profil-field-input" type="email" name="email" value="<?= $_SESSION["email"] ?? "" ?>" placeholder="Votre email">
                     <button type="submit" class="profil-field-btn">MODIFIER</button>
                 </div>
+            </form>
+
+            <form method="POST" action="/deleteUser" class="profil-delete">
+                <input type="hidden" name="id" value="<?= $_SESSION["id"] ?? 0 ?>">
+                
+                <div class="profil-delete-head">
+                    <h3 class="profil-delete-title">Supprimer mon compte</h3>
+                    <p class="profil-delete-desc">
+                        Cette action est définitive. Toutes vos données seront effacées et ne pourront pas être restaurées.
+                    </p>
+                </div>
+                
+                <button type="submit" class="profil-delete-btn" 
+                        onclick="return confirm('Confirmer la suppression définitive de votre compte ?')">
+                    Supprimer mon compte
+                </button>
             </form>
         </div>
     </section>
