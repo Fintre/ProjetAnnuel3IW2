@@ -3,15 +3,24 @@
 namespace App\Controller;
 
 use App\Controller\Base;
-use App\Service\AuthService;
 use App\Repository\UserRepository;
 use App\Service\EmailVerificationService;
 use App\Controller\EmailVerification;
+use App\Model\User;
 
 class Auth extends Base
 {
 
     private $errors = [];
+
+    private UserRepository $userRepository;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->userRepository = new UserRepository();
+    }
+
     public function signin(): void{   
         if(
             !empty($_POST["email"]) &&
@@ -19,17 +28,17 @@ class Auth extends Base
             count($_POST) == 2
         ){
             $email = $this->clearEmail($_POST["email"]);
-            $auth = new AuthService();
-            $userId = $auth->getUserIdFromMail($email);
+            
+            $userId = $this->userRepository->getFirstByCol('id', 'email', $email);
             if($userId){
                 $password = $_POST["pwd"];
-                $passwordMatch = $auth->verifyPassword($email, $password);
+                $passwordMatch = $this->userRepository->verifyPassword($password, $email);
                 
                 if($passwordMatch){
-                    $isActive = $auth->getIsActiveFromId($userId);
+                    $isActive = $this->userRepository->getFirstByCol('is_active', 'id', $userId);
                     
                     if($isActive === true){
-                        $userData = $auth->getUserDataFromId($userId);
+                        $userData = $this->userRepository->getByCol(['email', 'name', 'last_name', 'is_active', 'id', 'is_admin'], 'id', $userId);
                         $this->setSessionData($userData);
                         $this->renderPage("dashboard");
                     } else {
@@ -58,8 +67,7 @@ class Auth extends Base
         count($_POST) == 4
         ){
         $email = $this->clearEmail($_POST['email']);
-        $verifiyMail = new AuthService();
-        if($verifiyMail->verifyEmail($email)){
+        if($this->userRepository->getFirstByCol('id', 'email', $email)){
             $this->errors[]= "L'email existe déjà en bdd";
         } 
         $name = $this->clearName($_POST['name']);
@@ -76,21 +84,15 @@ class Auth extends Base
         }  
         if(empty($this->errors)){
             $pwdHashed = password_hash($_POST["pwd"], PASSWORD_DEFAULT );
-            $data = [
-                "name"=> $name,
-                "email"=> $email,
-                "password"=> $pwdHashed,
-                "is_admin"=> 'false',
-            ];
-            $auth = new AuthService();
-            $isUserEmpty = $auth->checkIfUserTableIsEmpty();
-            if($isUserEmpty['count'] == 0) {
-                $data["is_admin"] = 'true';
-                var_dump($data);
-            }
-            $userId = $auth->createUser($data);
-            $userData = $auth->getUserDataFromId($userId);
+            $user = new User();
+            $user->setName($name);
+            $user->setEmail($email);
+            $user->setPassword($pwdHashed);
+            $user->setIsAdmin('false');
+            $userId = $this->userRepository->create($user);
+            
             if(!empty($userId)){
+                $userData = $this->userRepository->getByCol(['email', 'name', 'last_name', 'is_active', 'id', 'is_admin'], 'id', $userId);
                 $this->setSessionData($userData);
                 $token = hash("sha256", bin2hex(random_bytes(32)));
                 $data = [
@@ -102,7 +104,7 @@ class Auth extends Base
                 $emailController = new EmailVerification();
                 $emailController->sendVerificationMail($email, $token, "Veuillez activer votre compte", 'activation');
             }
-            $this->renderHome();
+            $this->renderPage("home", "headerFooter");
         } else {
             $this->renderPage("signup", "headerFooter", ["errors" => $this->errors]);
         }
@@ -120,23 +122,31 @@ class Auth extends Base
 
     public function updateUser(){
         $this->isAuth();
-        $auth = new AuthService();
-         if(!empty($_POST['name'])) {
-            $name = $this->clearName( $_POST['name'] );
+
+        if(!empty($_POST['name'])) {
+            $name = $this->clearName('name');
             if(empty($this->errors)){
-                $auth->updateUserName( $name, $_SESSION["id"]);
-                $value = ["name" => $name];
-                $this->setSessionData($value);
-            }
-        }  
-        if($_SESSION['email'] !== $_POST['email']){
-            if(!empty($_POST['email'])){
-                $email = $this->clearEmail( $_POST['email'] );
-                $auth->updateUserEmail( $email, $_SESSION["id"]);
-                $value = ["email" => $email];
-                $this->setSessionData($value);
+                $this->userRepository->updateColumn(['name' => $name], $_SESSION["id"]);
+                $this->setSessionData(["name" => $name]);
             }
         }
+
+        if(!empty($_POST['lastname'])) {
+            $lastName = $this->clearName('lastname');
+            if(empty($this->errors)){
+                $this->userRepository->updateColumn(['last_name' => $lastName], $_SESSION["id"]);
+                $this->setSessionData(["last_name" => $lastName]);
+            }
+        }
+
+        if($_SESSION['email'] !== $_POST['email']){
+            if(!empty($_POST['email'])){
+                $email = $this->clearEmail($_POST['email']);
+                $this->userRepository->updateColumn(['email' => $email], $_SESSION["id"]);
+                $this->setSessionData(["email" => $email]);
+            }
+        }
+
         $this->renderPage("userProfil", "headerFooter");
     }
 
@@ -149,8 +159,8 @@ class Auth extends Base
         }
     }
 
-    public function clearName($name){
-        $name = ucwords(strtolower(trim($_POST['name'])));
+    public function clearName($type){
+        $name = ucwords(strtolower(trim($_POST[$type])));
 
         if(!empty($name) && strlen($name)<2){
             $this->errors[]="Votre prénom doit faire au minimum 2 caractères";
@@ -159,26 +169,30 @@ class Auth extends Base
         }
     }
     
-    public function deleteUser(){
-        $auth = new AuthService();
-        if(isset($_POST["id"])){
-            $userId = $_POST["id"];
+   public function deleteUser(){
+        $this->isAuth();
+        
+        $targetId = (int) ($_POST["id"] ?? 0);
+        $isSelfDelete = ($_SESSION["id"] == $targetId);
+        $isAdmin = !empty($_SESSION["is_admin"]);
+        
+        if(!$isSelfDelete && !$isAdmin){
+            $this->renderHome();
+            return;
         }
-        $auth->deleteUserByID( $userId );
-        if($_SESSION["id"] == $userId){
+        
+        if($targetId === 0){
+            $this->renderUsers();
+            return;
+        }
+        
+        $this->userRepository->delete($targetId);
+        
+        if($isSelfDelete){
             $this->logout();
         } else {
             $this->renderUsers();
         }
-    }
-
-    public function setAdminUser(){
-        $auth = new AuthService();
-        if(isset($_POST["id"])){
-            $auth->setUserAdmin($_POST['id']);
-        }
-        $this->renderUsers();
-        
     }
 
     public function renderSignup(): void{
@@ -203,15 +217,6 @@ class Auth extends Base
         $this->renderPage("dashboard", "backoffice");
     }   
 
-
-    public function renderUsers() {
-        $this->isAuth();
-        $auth = new AuthService();
-        $allusers = $auth->getAllUser();
-        $this->renderPage("allUser", "backoffice", ["users"=> $allusers]);
-
-    }
-
     public function renderResetPassword(){
         $this->renderPage("resetPassword");
     }
@@ -224,28 +229,29 @@ class Auth extends Base
     }
 
     public function updatePassword() {
-         if(
+        if(
             !empty($_POST["email"]) &&
             !empty($_POST['pwd']) &&
             !empty($_POST['pwdConfirm']) &&
             count($_POST) == 3
-         ){
+        ){
             $this->verifyPassword($_POST['pwd'], $_POST['pwdConfirm']);
             if(empty($this->errors)){
-            $pwdHashed = password_hash($_POST["pwd"], PASSWORD_DEFAULT );
-            $email = $this->clearEmail( $_POST["email"] );
-            $auth = new AuthService();
-            $userId = $auth->getUserIdFromMail($email);
-            if(!empty($userId)){
-                $auth->updateUserPasswordFromId($userId, $pwdHashed);
-                $_SESSION['error']="Votre mot de passe à été modifié";
-                $this->renderPage("login");
-            } 
-            }else{
-                $_SESSION['error']="Mdp invalid";
+                $pwdHashed = password_hash($_POST["pwd"], PASSWORD_DEFAULT);
+                $email = $this->clearEmail($_POST["email"]);
+                
+                $userId = $this->userRepository->getFirstByCol('id', 'email', $email);
+                
+                if(!empty($userId)){
+                    $this->userRepository->updateColumn(['password' => $pwdHashed], $userId);
+                    $_SESSION['error'] = "Votre mot de passe à été modifié";
+                    $this->renderPage("login");
+                }
+            } else {
+                $_SESSION['error'] = "Mdp invalid";
                 $this->renderPage("modifyPassword", "headerFooter", ["errors" => $this->errors]);
-            } 
-        } else{
+            }
+        } else {
             echo "Tentative de XSS";
             $this->renderPage("signup");
         }
@@ -264,15 +270,8 @@ class Auth extends Base
         }  
     }
 
-
-    public function getUser(){
-        $userRepository = new UserRepository();
-        $result = $userRepository->getAlldata();
-        
-        echo "<pre>";
-        var_dump($result);
-        echo "</pre>";
-        exit;
+    public function renderHome() {
+         $this->renderPage("home", "headerFooter");
     }
 }
 

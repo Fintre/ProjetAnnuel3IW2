@@ -1418,6 +1418,54 @@ h3 {
   padding: 0.25rem;
 }
 
+.profil-delete {
+  padding-top: 2rem;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.profil-delete-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.profil-delete-title {
+  font-family: var(--display);
+  font-weight: var(--weight-title);
+  font-size: 1.4rem;
+  color: var(--ink);
+}
+
+.profil-delete-desc {
+  font-family: var(--sans);
+  font-size: var(--text-size-s);
+  color: var(--ink-2);
+  opacity: 0.65;
+  line-height: 1.55;
+  max-width: 32rem;
+}
+
+.profil-delete-btn {
+  align-self: flex-start;
+  background-color: transparent;
+  border: 1px solid var(--amber);
+  color: var(--amber);
+  border-radius: 60rem;
+  padding: 0.7rem 1.5rem;
+  font-family: var(--sans);
+  font-size: var(--text-size-btn);
+  font-weight: var(--weight-btn);
+  cursor: pointer;
+}
+
+.profil-delete-btn:hover {
+  background-color: var(--amber);
+  color: var(--cream);
+}
+
 @media (max-width: 1150px) {
   .screen-size {
     padding: var(--size-tablet);
