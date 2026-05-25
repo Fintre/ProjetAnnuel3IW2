@@ -1,9 +1,8 @@
 #Base method/path
 /:
-  controller: Base
-  action: index
+  controller: Auth
+  action: renderHome
   method: GET
-  access: guest
 
 /abonnement:
   controller: Auth

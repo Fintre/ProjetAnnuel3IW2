@@ -15,9 +15,6 @@ abstract class Base
         $this->db = Database::getInstance();
     }
 
-    public function index() {
-         $this->renderPage("home", "headerFooter");
-    }
     protected function renderPage(string $view, string $template = "headerFooter", array $data = []):void{
         $render = new Render($view, $template);  
         if(!empty($data)){
@@ -28,13 +25,8 @@ abstract class Base
         $render->render();
     }
 
-    protected function renderHome(){
-        $render = new Render("home", "headerFooter");
-        $render->render();
-    }
-
     public function setSessionData($userData) {
-    $keysToStore = ['id', 'name', 'email', 'is_active', 'is_admin'];
+    $keysToStore = ['id', 'name', 'last_name', 'email', 'is_active', 'is_admin'];
 
     foreach ($keysToStore as $key) {
         if (isset($userData[$key])) { 
@@ -143,26 +135,26 @@ abstract class Base
     }
 
 
-    /*
     protected function dbFindByColumnsWhere(string $table, array $columns, array $criteria, string $orderBy = null): array {
         $this->validateColumns($columns);
         $cols = implode(', ', $columns);
         $conditions = implode(' AND ', array_map(fn($k) => "{$k} = :{$k}", array_keys($criteria)));
-        $sql = "SELECT {$cols} FROM {$table}";
+        $sql = "SELECT {$cols} FROM {$table} WHERE {$conditions}";
         if ($orderBy) {
             $sql .= " ORDER BY {$orderBy}";
         }
 
         $stmt = $this->db->getConnection()->prepare($sql);
-        $stmt->execute();
+        $stmt->execute($criteria);
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
-    */
 
 
     protected function dbUpdate(string $table, array $data, int $id): bool
     {
+
+        $this->validateColumns(array_keys($data));
         $fields = implode(', ', array_map(fn($k) => "{$k} = :{$k}", array_keys($data)));
 
         $stmt = $this->db->getConnection()->prepare(
