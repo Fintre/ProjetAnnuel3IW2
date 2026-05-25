@@ -40,7 +40,7 @@ class Auth extends Base
                     if($isActive === true){
                         $userData = $this->userRepository->getByCol(['email', 'name', 'last_name', 'is_active', 'id', 'is_admin'], 'id', $userId);
                         $this->setSessionData($userData);
-                        $this->renderPage("dashboard");
+                        $this->renderPage("userProfil");
                     } else {
                         $this->errors[]="Votre compte n'est pas encore activé";
                         $this->renderPage("login", "headerFooter", ["errors" => $this->errors]);
@@ -211,11 +211,6 @@ class Auth extends Base
         $this->isAuth();
         $this->renderPage( "userProfil", "headerFooter");
     }
-
-    public function renderDashboard(): void {
-        $this->isAuth();
-        $this->renderPage("dashboard", "backoffice");
-    }   
 
     public function renderResetPassword(){
         $this->renderPage("resetPassword");
