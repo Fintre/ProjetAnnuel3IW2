@@ -5,7 +5,7 @@ namespace App\Repository;
 use App\Controller\Base;
 use App\Model\Account;
 
-class EmailVerificationRepository extends Base
+class BankAccountRepository  extends Base
 {
     protected string $table = 'account';
 
@@ -18,7 +18,7 @@ class EmailVerificationRepository extends Base
             'creation_date'        => $account->getCreationDate(),
             'annual_interest_rate' => $account->getAnnualInterestRate(),
             'tax_rate'             => $account->getTaxRate(),
-            'balance'              => $account->getBalance(),
+            'solde'                => $account->getSolde(),
             'registered_at'        => $account->getRegisteredAt(),
         ]);
     }
@@ -40,7 +40,7 @@ class EmailVerificationRepository extends Base
             'description'          => $account->getDescription(),
             'annual_interest_rate' => $account->getAnnualInterestRate(),
             'tax_rate'             => $account->getTaxRate(),
-            'balance'              => $account->getBalance(),
+            'solde'                => $account->getSolde(),
         ], $account->getId());
     }
 

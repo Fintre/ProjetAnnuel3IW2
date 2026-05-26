@@ -3,6 +3,7 @@
   controller: Auth
   action: renderHome
   method: GET
+  access: guest
 
 /abonnement:
   controller: Auth
@@ -64,12 +65,6 @@
   method: GET
   access: auth
 
-/dashboard:
-  controller: Auth
-  action: renderDashboard
-  method: GET
-  access: auth
-
 /users:
   controller: Auth
   action: renderUsers
@@ -110,13 +105,20 @@
   controller: BankAccount
   action: create
   method: POST
+  access: auth
 
 /formBankAccount:
   controller: BankAccount
   action: formCreate
   access: auth
 
-/testUser:
-  controller: Auth
-  action: getUser
+/accounts:
+  controller: BankAccount
+  action: renderAccounts
   method: GET
+
+/manageAccounts:
+  controller: BankAccount
+  action: renderManageAccounts
+  method: GET
+  access: auth

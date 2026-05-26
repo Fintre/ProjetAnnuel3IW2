@@ -29,15 +29,27 @@
                         <svg class="profil-side-icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                             <rect x="4" y="4" width="8" height="8" transform="rotate(45 8 8)" stroke="currentColor" stroke-width="1.2" fill="none"/>
                         </svg>
-                        Abonnement
+                        Modifier mon abonnement
                     </a>
                 </li>
             </ul>
 
-            <div class="profil-side-plan">
+            <?php
+                $type = $_SESSION['subscription_type'] ?? 'FREE';
+                $planMap = [
+                    'FREE' => ['name' => 'Roarr Free', 'price' => 'Gratuit'],
+                    'PLUS' => ['name' => 'Roarr Plus', 'price' => '€5,00/mois'],
+                    'PRO'  => ['name' => 'Roarr Pro',  'price' => '€15,00/mois'],
+                ];
+                $plan = $planMap[$type] ?? $planMap['FREE'];
+            ?>
+            <div class="profil-side-plan profil-side-plan-<?= strtolower($type) ?>">
                 <p class="profil-side-plan-label">PLAN ACTUEL</p>
-                <p class="profil-side-plan-name">Roarr Plus</p>
-                <p class="profil-side-plan-price">€4,90/mois</p>
+                <p class="profil-side-plan-name"><?= $plan['name'] ?></p>
+                <p class="profil-side-plan-price"><?= $plan['price'] ?></p>
+                <?php if ($type === 'PRO'): ?>
+                    <span class="profil-side-plan-badge">★ PREMIUM</span>
+                <?php endif; ?>
             </div>
         </aside>
 
