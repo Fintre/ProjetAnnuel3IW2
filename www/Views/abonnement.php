@@ -46,10 +46,6 @@
                 </li>
                 <li class="abo-card-feature">
                     <span class="abo-card-feature-dash">—</span>
-                    <span class="abo-card-feature-text">Export CSV de l'historique</span>
-                </li>
-                <li class="abo-card-feature">
-                    <span class="abo-card-feature-dash">—</span>
                     <span class="abo-card-feature-text">Connexion sécurisée DSP2</span>
                 </li>
             </ul>
@@ -89,10 +85,6 @@
                 <li class="abo-card-feature">
                     <span class="abo-card-feature-dash">—</span>
                     <span class="abo-card-feature-text">Simulateur d'imprévus avancé</span>
-                </li>
-                <li class="abo-card-feature">
-                    <span class="abo-card-feature-dash">—</span>
-                    <span class="abo-card-feature-text">Export CSV & PDF illimité</span>
                 </li>
                 <li class="abo-card-feature">
                     <span class="abo-card-feature-dash">—</span>

@@ -22,7 +22,7 @@
                         <a href="/signup" class="header-auth-link link-button">Commencer</a>
                     </div>
                 <?php else: ?>
-                    <a href="/" class="header-logo">Roar<span class="header-logo-color">r.</span></a>
+                    <a href="/accounts" class="header-logo">Roar<span class="header-logo-color">r.</span></a>
                     <ul class="header-ul">
                         <li><a href="/abonnement" class="header-ul-link">ABONNEMENT</a></li>
                         <li><a href="/accounts" class="header-ul-link">MES COMPTES</a></li>

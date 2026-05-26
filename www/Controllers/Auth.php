@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Controller\Base;
 use App\Repository\UserRepository;
 use App\Repository\EmailVerificationRepository;
+use App\Repository\SubscriptionRepository;
 use App\Controller\EmailVerification;
 use App\Model\User;
 use App\Model\EmailVerification as EmailVerificationModel;
+use App\Model\Subscription;
 
 
 class Auth extends Base
@@ -17,11 +19,13 @@ class Auth extends Base
 
     private UserRepository $userRepository;
     private EmailVerificationRepository $emailRepository;
+    private SubscriptionRepository $subscriptionRepository;
 
     public function __construct(){
         parent::__construct();
         $this->userRepository = new UserRepository();
         $this->emailRepository = new EmailVerificationRepository();
+        $this->subscriptionRepository = new SubscriptionRepository();
     }
 
     public function signin(): void{   
@@ -42,6 +46,7 @@ class Auth extends Base
                     
                     if($isActive === true){
                         $userData = $this->userRepository->getByCol(['email', 'name', 'last_name', 'is_active', 'id', 'is_admin'], 'id', $userId);
+                        $userData['subscription_type'] = $this->subscriptionRepository->getFirstByCol('type', 'user_id', $userId) ?? 'FREE';
                         $this->setSessionData($userData);
                         $this->renderPage("userProfil");
                     } else {
@@ -97,8 +102,15 @@ class Auth extends Base
             $userId = $this->userRepository->create($user);
             
             if(!empty($userId)){
+                $subscription = new Subscription();
+                $subscription->setUserId($userId);
+                $subscription->setType('FREE');
+                $this->subscriptionRepository->create($subscription);
+
                 $userData = $this->userRepository->getByCol(['email', 'name', 'last_name', 'is_active', 'id', 'is_admin'], 'id', $userId);
+                $userData['subscription_type'] = 'FREE';
                 $this->setSessionData($userData);
+
                 $token = hash("sha256", bin2hex(random_bytes(32)));
                 $emailVerification = new EmailVerificationModel();
                 $emailVerification->setUserID($userId);
@@ -213,7 +225,7 @@ class Auth extends Base
 
     public function renderProfil(): void{
         $this->isAuth();
-        $this->renderPage( "userProfil", "headerFooter");
+        $this->renderPage("userProfil", "headerFooter");
     }
 
     public function renderResetPassword(){
