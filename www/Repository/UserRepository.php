@@ -13,6 +13,7 @@ class UserRepository extends Base
     public function create(User $user): string|false {
         return $this->dbInsert($this->table, [
             'name'  => $user->getName(),
+            'last_name'  => $user->getLastName(),
             'email' => $user->getEmail(),
             'password' => $user->getPassword(),
             'is_admin' => $user->getIsAdmin(),
@@ -50,7 +51,17 @@ class UserRepository extends Base
         }
         return password_verify($password, $rows[0]['password']);
     }
+
+    public function verifyEmail(string $email): bool {
+        return $this->getFirstByCol('id', 'email', $email) !== null;
+    }
+
     public function delete(int $userId): bool {
         return $this->dbDelete($this->table, $userId);
     }
+
+     public function activate(int $userId): bool {
+        return $this->updateColumn(['is_active' => true], $userId);
+    }
+
 }

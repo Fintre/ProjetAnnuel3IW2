@@ -3,9 +3,10 @@
 namespace App\Controller;
 
 use App\Controller\Base;
-use App\Service\EmailVerificationService;
-use App\Service\AuthService;
 use App\Controller\Auth;
+use App\Repository\EmailVerificationRepository;
+use App\Repository\UserRepository;
+
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -16,8 +17,18 @@ class EmailVerification extends Base
 {
 
     private $errors = [];
+
+    private UserRepository $userRepository;
+    private EmailVerificationRepository $emailRepository;
+
+    public function __construct(){
+        parent::__construct();
+        $this->userRepository = new UserRepository();
+        $this->emailRepository = new EmailVerificationRepository();
+    }
+
     public function sendVerificationMail($email, $token, $subject, $path){
-        $activationLink = "http://localhost:8080/".$path."?email=".$email."&token=".$token;
+        $activationLink = "http://localhost:1001/".$path."?email=".$email."&token=".$token;
         $mail = new PHPMailer(true);
             try {
                 $mail->SMTPDebug = 0;
@@ -44,17 +55,16 @@ class EmailVerification extends Base
     public function sendResetPwdMail(){
         $auth = new Auth();
         $email = $auth->clearEmail($_POST['email']);
-        $verifiyMail = new AuthService();
-        if($verifiyMail->verifyEmail($email)){
-            $userId = $verifiyMail->getUserIdFromMail($email);
-            $is_active = $verifiyMail->getIsActiveFromId($userId);
-            if($is_active === false){
+        $userId = $this->userRepository->getFirstByCol('id', 'email', $email);
+        if($userId){
+            $data = $this->userRepository->getByCol(['is_active'], 'id', $userId);
+            $isActive = $data['is_active'] ?? false;
+            if($isActive === false){
                 $this->errors[]= "Vous devez d'abord activer votre compte par mail";
                 $this->renderPage("resetPassword", "headerFooter", ["errors" => $this->errors]);
             } else {
                 $token = hash("sha256", bin2hex(random_bytes(32)));
-                $emailVerificationService = new EmailVerificationService();
-                $emailVerificationService->updateUserToken($userId, $token);
+                $this->emailRepository->updateToken($userId, $token);
                 $this->sendVerificationMail($email, $token, "Veuillez modifier votre mot de passe", 'modifyPassword');
             }
         } else{
@@ -67,12 +77,14 @@ class EmailVerification extends Base
         $token = isset($_GET["token"]) ? $_GET["token"] : null;
         $isActiveToken = $this->verifyIfTokenExist($token);
         if($isActiveToken){
-            $emailverificationService = new EmailVerificationService();
-            $userId = $emailverificationService->getUserIdFromToken($token);
+            $userId = $this->emailRepository->findUserIdByToken($token);
             if(!empty($userId)){
-                $auth = new AuthService();
-                $emailverificationService->activeAccount($userId);
-                $userData = $auth->getUserDataFromId($userId);
+                $this->userRepository->activate($userId);
+                $userData = $this->userRepository->getByCol(
+                    ['email', 'name', 'last_name', 'is_active', 'id', 'is_admin'],
+                    'id',
+                    $userId
+                );
                 $this->setSessionData($userData);
             }
             $this->renderPage("userProfil");
@@ -83,8 +95,7 @@ class EmailVerification extends Base
         if (!isset($token)) {
             $this->renderPage("home", "headerFooter");
         } else{
-            $emailService = new EmailVerificationService();
-            $tokenExist = $emailService->getUserIdFromToken($token);
+            $tokenExist = $this->emailRepository->findUserIdByToken($token);
             if(!$tokenExist){
                 $this->renderPage("home", "headerFooter");
             } else{

@@ -58,17 +58,22 @@
         <form method="POST" action="/addUser" class="signup-fields">
             <div class="signup-field">
                 <label for="signup-name" class="signup-field-label">PRÉNOM</label>
-                <input id="signup-name" class="signup-field-input" type="text" value="<?= $_POST["firstname"] ?? "" ?>" name="name" placeholder="Votre prénom">
+                <input id="signup-name" class="signup-field-input" type="text" value="<?= $_POST["firstname"] ?? "" ?>" name="name" placeholder="Prénom">
+            </div>
+
+            <div class="signup-field">
+                <label for="signup-lastname" class="signup-field-label">NOM</label>
+                <input id="signup-lastname" class="signup-field-input" type="text" value="<?= $_POST["lastname"] ?? "" ?>" name="lastname" placeholder="Nom">
             </div>
 
             <div class="signup-field">
                 <label for="signup-email" class="signup-field-label">ADRESSE EMAIL</label>
-                <input id="signup-email" class="signup-field-input" type="email" value="<?= $_POST["email"] ?? "" ?>" required name="email" placeholder="Votre email">
+                <input id="signup-email" class="signup-field-input" type="email" value="<?= $_POST["email"] ?? "" ?>" required name="email" placeholder="Email">
             </div>
 
             <div class="signup-field">
                 <label for="signup-pwd" class="signup-field-label">MOT DE PASSE</label>
-                <input id="signup-pwd" class="signup-field-input" type="password" required name="pwd" placeholder="Votre mot de passe">
+                <input id="signup-pwd" class="signup-field-input" type="password" required name="pwd" placeholder="Mot de passe">
             </div>
 
             <div class="signup-field">

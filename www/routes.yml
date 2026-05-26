@@ -109,3 +109,8 @@
   controller: BankAccount
   action: formCreate
   access: auth
+
+/accounts:
+  controller: BankAccount
+  action: renderAccounts
+  method: GET

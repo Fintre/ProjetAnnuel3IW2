@@ -110,5 +110,11 @@ class BankAccount extends Base
             // Redirection
         }
     }
+
+    public function renderAccounts(): void{
+        $this->isAuth();
+        $accounts = $this->repository->findByUser($this->getCurrentUserId());
+        $this->renderPage("accounts", "headerFooter", ['accounts' => $accounts]);
+    }
 }
 
