@@ -24,8 +24,9 @@
                 <?php else: ?>
                     <a href="/" class="header-logo">Roar<span class="header-logo-color">r.</span></a>
                     <ul class="header-ul">
-                        <li><a href="/abonnement" class="header-ul-link">Abonnement</a></li>
-                        <li><a href="/profil" class="header-ul-link">Profil</a></li>
+                        <li><a href="/abonnement" class="header-ul-link">ABONNEMENT</a></li>
+                        <li><a href="/accounts" class="header-ul-link">MES COMPTES</a></li>
+                        <li><a href="/profil" class="header-ul-link">PROFIL</a></li>
                     </ul>
                     <form method="POST" action="/logout" class="header-logout">
                         <button type="submit" class="header-logout-btn">

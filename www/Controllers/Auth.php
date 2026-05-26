@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Controller\Base;
 use App\Repository\UserRepository;
-use App\Service\EmailVerificationService;
+use App\Repository\EmailVerificationRepository;
 use App\Controller\EmailVerification;
 use App\Model\User;
+use App\Model\EmailVerification as EmailVerificationModel;
+
 
 class Auth extends Base
 {
@@ -14,11 +16,12 @@ class Auth extends Base
     private $errors = [];
 
     private UserRepository $userRepository;
+    private EmailVerificationRepository $emailRepository;
 
-    public function __construct()
-    {
+    public function __construct(){
         parent::__construct();
         $this->userRepository = new UserRepository();
+        $this->emailRepository = new EmailVerificationRepository();
     }
 
     public function signin(): void{   
@@ -61,17 +64,18 @@ class Auth extends Base
     public function signup(): void{
         if(
         isset($_POST['name']) &&
+        isset($_POST['lastname']) &&
         !empty($_POST['email']) &&
         !empty($_POST['pwd']) &&
         !empty($_POST['pwdConfirm']) &&
-        count($_POST) == 4
+        count($_POST) == 5
         ){
         $email = $this->clearEmail($_POST['email']);
         if($this->userRepository->getFirstByCol('id', 'email', $email)){
             $this->errors[]= "L'email existe déjà en bdd";
         } 
-        $name = $this->clearName($_POST['name']);
-
+        $name = $this->clearName('name');
+        $lastname = $this->clearName('lastname');
         if(strlen($_POST["pwd"]) < 8 ||
             !preg_match('/[a-z]/', $_POST["pwd"] ) ||
             !preg_match('/[A-Z]/', $_POST["pwd"]) ||
@@ -86,6 +90,7 @@ class Auth extends Base
             $pwdHashed = password_hash($_POST["pwd"], PASSWORD_DEFAULT );
             $user = new User();
             $user->setName($name);
+            $user->setLastName($lastname);
             $user->setEmail($email);
             $user->setPassword($pwdHashed);
             $user->setIsAdmin('false');
@@ -95,12 +100,11 @@ class Auth extends Base
                 $userData = $this->userRepository->getByCol(['email', 'name', 'last_name', 'is_active', 'id', 'is_admin'], 'id', $userId);
                 $this->setSessionData($userData);
                 $token = hash("sha256", bin2hex(random_bytes(32)));
-                $data = [
-                "user_id"=> $userId,
-                "token"=> $token,
-            ];
-                $emailService = new EmailVerificationService();
-                $emailService->createUserToken($data);
+                $emailVerification = new EmailVerificationModel();
+                $emailVerification->setUserID($userId);
+                $emailVerification->setToken($token);
+                $this->emailRepository->create($emailVerification);
+
                 $emailController = new EmailVerification();
                 $emailController->sendVerificationMail($email, $token, "Veuillez activer votre compte", 'activation');
             }

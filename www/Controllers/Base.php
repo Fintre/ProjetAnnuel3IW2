@@ -39,7 +39,7 @@ abstract class Base
     public function isAuth(): void
     {
         if (!isset($_SESSION["is_active"]) || $_SESSION["is_active"] !== true) {
-            $this->renderHome();
+            $this->renderPage("home");
             exit;
         }
     }
@@ -164,6 +164,21 @@ abstract class Base
         $data['id'] = $id;
 
         return $stmt->execute($data);
+    }
+
+    protected function dbUpdateBy(string $table, array $data, array $criteria): bool {
+        $set = implode(', ', array_map(fn($k) => "{$k} = :set_{$k}", array_keys($data)));
+        $where = implode(' AND ', array_map(fn($k) => "{$k} = :where_{$k}", array_keys($criteria)));
+        $sql = "UPDATE {$table} SET {$set} WHERE {$where}";
+
+        $stmt = $this->db->getConnection()->prepare($sql);
+        foreach ($data as $k => $v) {
+            $stmt->bindValue(":set_{$k}", $v);
+        }
+        foreach ($criteria as $k => $v) {
+            $stmt->bindValue(":where_{$k}", $v);
+        }
+        return $stmt->execute();
     }
 
     protected function dbDelete(string $table, int $id): bool

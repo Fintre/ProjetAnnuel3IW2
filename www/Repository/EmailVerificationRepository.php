@@ -5,47 +5,24 @@ namespace App\Repository;
 use App\Controller\Base;
 use App\Model\EmailVerification;
 
-class BankAccountRepository extends Base
+class EmailVerificationRepository extends Base
 {
-    protected string $table = 'account';
+    protected string $table = 'email_verification';
+    protected array $validColumns = ['id', 'user_id', 'token', 'created_at'];
 
-    public function store(Account $account): string|false
-    {
+    public function create(EmailVerification $email): string|false {
         return $this->dbInsert($this->table, [
-            'user_id'              => $account->getUserId(),
-            'short_name'           => $account->getShortName(),
-            'description'          => $account->getDescription(),
-            'creation_date'        => $account->getCreationDate(),
-            'annual_interest_rate' => $account->getAnnualInterestRate(),
-            'tax_rate'             => $account->getTaxRate(),
-            'balance'              => $account->getBalance(),
-            'registered_at'        => $account->getRegisteredAt(),
+            'user_id'    => $email->getUserID(),
+            'token'      => $email->getToken(),
+            'created_at' => date('Y-m-d'),
         ]);
     }
 
-    public function findByUser(int $userId): array
-    {
-        return $this->dbFindBy($this->table, ['user_id' => $userId]);
+    public function findUserIdByToken(string $token): ?int{
+        $rows = $this->dbFindByColumnsWhere($this->table, ['user_id'], ['token' => $token]);
+        return $rows[0]['user_id'] ?? null;
     }
-
-    public function findById(int $id): array|false
-    {
-        return $this->dbFindById($this->table, $id);
-    }
-
-    public function update(Account $account): bool
-    {
-        return $this->dbUpdate($this->table, [
-            'short_name'           => $account->getShortName(),
-            'description'          => $account->getDescription(),
-            'annual_interest_rate' => $account->getAnnualInterestRate(),
-            'tax_rate'             => $account->getTaxRate(),
-            'balance'              => $account->getBalance(),
-        ], $account->getId());
-    }
-
-    public function destroy(int $id): bool
-    {
-        return $this->dbDelete($this->table, $id);
+    public function updateToken(int $userId, string $token): bool {
+        return $this->dbUpdateBy($this->table, ['token' => $token], ['user_id' => $userId]);
     }
 }
