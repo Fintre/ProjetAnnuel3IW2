@@ -18,35 +18,36 @@ class BankAccount extends Base
 
     public function create(): void
     {
+        $this->isAuth();
+
         if (
             !empty($_POST["short_name"]) &&
-            !empty($_POST["annual_interest_rate"]) &&
-            !empty($_POST["tax_rate"]) &&
-            !empty($_POST["balance"])
+            isset($_POST["annual_interest_rate"]) &&
+            isset($_POST["tax_rate"]) &&
+            isset($_POST["solde"])
         ) {
             $userId = $this->getCurrentUserId();
 
             if ($userId) {
                 $account = new Account();
-                    $account->setUserId($userId);
-                    $account->setShortName($_POST['short_name']);
-                    $account->setDescription($_POST['description'] ?? '');
-                    $account->setAnnualInterestRate((float) $_POST['annual_interest_rate']);
-                    $account->setTaxRate((float) $_POST['tax_rate']);
-                    $account->setBalance((float) $_POST['balance']);
-                    $account->setCreationDate(date('Y-m-d'));
-                    $account->setRegisteredAt(date('Y-m-d H:i:s'));
+                $account->setUserId($userId);
+                $account->setShortName($_POST['short_name']);
+                $account->setDescription($_POST['description'] ?? '');
+                $account->setAnnualInterestRate((float) $_POST['annual_interest_rate']);
+                $account->setTaxRate((float) $_POST['tax_rate']);
+                $account->setSolde((float) $_POST['solde']);
+                $account->setCreationDate(date('Y-m-d'));
+                $account->setRegisteredAt(date('Y-m-d H:i:s'));
 
-                    $repository = new BankAccountRepository();
-                    $repository->store($account);
+                $this->repository->store($account);
 
-                if ($account) {
-                    // Redirection
-                } else {
-                    // Erreur, faut créer un Erreur.php dans Core.
-                }
+                header("Location: /accounts");
+                exit;
             }
         }
+
+        header("Location: /manageAccounts");
+        exit;
     }
     public function formCreate(): void{
         $this->renderPage("formCreateAccount");
@@ -82,7 +83,7 @@ class BankAccount extends Base
             !empty($_POST["short_name"]) &&
             !empty($_POST["annual_interest_rate"]) &&
             !empty($_POST["tax_rate"]) &&
-            !empty($_POST["balance"])
+            !empty($_POST["solde"])
         ) {
             $account = new Account();
             $account->setId($id);
@@ -90,7 +91,7 @@ class BankAccount extends Base
             $account->setDescription($_POST['description'] ?? '');
             $account->setAnnualInterestRate((float) $_POST['annual_interest_rate']);
             $account->setTaxRate((float) $_POST['tax_rate']);
-            $account->setBalance((float) $_POST['balance']);
+            $account->setSolde((float) $_POST['solde']);
 
             $success = $this->repository->update($account);
 
@@ -115,6 +116,12 @@ class BankAccount extends Base
         $this->isAuth();
         $accounts = $this->repository->findByUser($this->getCurrentUserId());
         $this->renderPage("accounts", "headerFooter", ['accounts' => $accounts]);
+    }
+
+    public function renderManageAccounts(): void{
+        $this->isAuth();
+        $accounts = $this->repository->findByUser($this->getCurrentUserId());
+        $this->renderPage("manageAccounts", "headerFooter", ['accounts' => $accounts]);
     }
 }
 

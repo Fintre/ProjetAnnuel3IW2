@@ -11,8 +11,8 @@ class Account
     protected string $creation_date;       
     protected float  $annual_interest_rate;
     protected float  $tax_rate;            
-    protected float  $balance;             
-    protected string $registered_at;       
+    protected float  $solde;
+    protected string $registered_at;
 
     public function getId(): int { return $this->id; }
     public function setId(int $id): void { $this->id = $id; }
@@ -35,8 +35,8 @@ class Account
     public function getTaxRate(): float { return $this->tax_rate; }
     public function setTaxRate(float $tax_rate): void { $this->tax_rate = $tax_rate; }
 
-    public function getBalance(): float { return $this->balance; }
-    public function setBalance(float $balance): void { $this->balance = $balance; }
+    public function getSolde(): float { return $this->solde; }
+    public function setSolde(float $solde): void { $this->solde = $solde; }
 
     public function getRegisteredAt(): string { return $this->registered_at; }
     public function setRegisteredAt(string $registered_at): void { $this->registered_at = $registered_at; }

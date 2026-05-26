@@ -6,6 +6,7 @@ use App\Controller\Base;
 use App\Controller\Auth;
 use App\Repository\EmailVerificationRepository;
 use App\Repository\UserRepository;
+use App\Repository\SubscriptionRepository;
 
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -20,11 +21,13 @@ class EmailVerification extends Base
 
     private UserRepository $userRepository;
     private EmailVerificationRepository $emailRepository;
+    private SubscriptionRepository $subscriptionRepository;
 
     public function __construct(){
         parent::__construct();
         $this->userRepository = new UserRepository();
         $this->emailRepository = new EmailVerificationRepository();
+        $this->subscriptionRepository = new SubscriptionRepository();
     }
 
     public function sendVerificationMail($email, $token, $subject, $path){
@@ -85,6 +88,7 @@ class EmailVerification extends Base
                     'id',
                     $userId
                 );
+                $userData['subscription_type'] = $this->subscriptionRepository->getFirstByCol('type', 'user_id', $userId) ?? 'FREE';
                 $this->setSessionData($userData);
             }
             $this->renderPage("userProfil");

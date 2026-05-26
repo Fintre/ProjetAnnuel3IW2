@@ -7,7 +7,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- ENUMS
 -- =============================================
 CREATE TYPE frequency_type AS ENUM ('ONE_TIME', 'RECURRING');
-CREATE TYPE subscription_type AS ENUM ('FREE', 'PAID');
+CREATE TYPE subscription_type AS ENUM ('FREE', 'PLUS', 'PRO');
 CREATE TYPE transaction_type AS ENUM ('expense', 'income');
 
 -- =============================================
@@ -62,7 +62,7 @@ ALTER TABLE IF EXISTS public.email_verification
 -- TABLE : subscription
 -- =============================================
 CREATE TABLE subscription (
-    id                     UUID              PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id                     INTEGER           GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     user_id                INTEGER           NOT NULL,
     type                   subscription_type NOT NULL DEFAULT 'FREE',
     stripe_customer_id     TEXT,
@@ -83,7 +83,7 @@ CREATE INDEX idx_subscription_user ON subscription(user_id);
 -- TABLE : account
 -- =============================================
 CREATE TABLE account (
-    id                   UUID           PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     user_id              INTEGER        NOT NULL,
     short_name           VARCHAR(100)   NOT NULL,
     description          TEXT,
@@ -106,7 +106,7 @@ CREATE INDEX idx_account_user ON account(user_id);
 -- =============================================
 CREATE TABLE "transaction" (
     id              UUID             PRIMARY KEY DEFAULT uuid_generate_v4(),
-    account_id      UUID             NOT NULL,
+    account_id      INTEGER          NOT NULL,
     type            transaction_type NOT NULL,
     short_name      VARCHAR(100)     NOT NULL,
     description     TEXT,

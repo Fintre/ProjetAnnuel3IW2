@@ -26,10 +26,10 @@ abstract class Base
     }
 
     public function setSessionData($userData) {
-    $keysToStore = ['id', 'name', 'last_name', 'email', 'is_active', 'is_admin'];
+    $keysToStore = ['id', 'name', 'last_name', 'email', 'is_active', 'is_admin', 'subscription_type'];
 
     foreach ($keysToStore as $key) {
-        if (isset($userData[$key])) { 
+        if (isset($userData[$key])) {
             $_SESSION[$key] = $userData[$key];
         }
     }

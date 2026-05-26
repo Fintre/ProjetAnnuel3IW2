@@ -32,22 +32,10 @@ if (!file_exists("routes.yml")) {
 $routes = yaml_parse_file("routes.yml");
 
 if (empty($routes[$uri])) {
-
-    $slug = ltrim($uri, '/');
-    if (!empty($slug) && file_exists("Controllers/Page.php")) {
-        include "Controllers/Page.php";
-        $pageControllerClass = "App\\Controller\\Page";
-        if (class_exists($pageControllerClass)) {
-            $pageController = new $pageControllerClass();
-
-            $_GET['slug'] = $slug;
-            if (method_exists($pageController, 'renderBySlug')) {
-                $pageController->renderBySlug();
-                exit;
-            }
-        }
-    }
-    die("Page 404");
+    http_response_code(404);
+    $render = new \App\Core\Render("404", "headerFooter");
+    $render->render();
+    exit;
 }
 
 if (empty($routes[$uri]["controller"]) || empty($routes[$uri]["action"])) {
@@ -66,7 +54,7 @@ if ($currentMethod !== strtoupper($_SERVER['REQUEST_METHOD'])) {
 $access = $routes[$uri]["access"] ?? null;
 $isLoggedIn = isset($_SESSION["is_active"]) && $_SESSION["is_active"] === true;
 if ($access === "guest" && $isLoggedIn) {
-    header("Location: /profil");
+    header("Location: /accounts");
     exit;
 }
 if ($access === "auth" && !$isLoggedIn) {
