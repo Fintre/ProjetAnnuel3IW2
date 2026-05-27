@@ -15,6 +15,7 @@ use App\Model\Subscription;
 class Auth extends Base
 {
 
+
     private $errors = [];
 
     private UserRepository $userRepository;
@@ -136,7 +137,7 @@ class Auth extends Base
         $this->renderPage( "home");
     }
 
-    public function updateUser(){
+    public function updateUser(): void{
         $this->isAuth();
 
         if(!empty($_POST['name'])) {
@@ -185,7 +186,7 @@ class Auth extends Base
         }
     }
     
-   public function deleteUser(){
+   public function deleteUser(): void{
         $this->isAuth();
         
         $targetId = (int) ($_POST["id"] ?? 0);
@@ -228,7 +229,7 @@ class Auth extends Base
         $this->renderPage("userProfil", "headerFooter");
     }
 
-    public function renderResetPassword(){
+    public function renderResetPassword(): void{
         $this->renderPage("resetPassword");
     }
 
@@ -239,7 +240,7 @@ class Auth extends Base
         if($isActiveToken){ $this->renderPage("modifyPassword", "headerFooter"); }
     }
 
-    public function updatePassword() {
+    public function updatePassword(): void {
         if(
             !empty($_POST["email"]) &&
             !empty($_POST['pwd']) &&
@@ -268,7 +269,7 @@ class Auth extends Base
         }
     }
 
-    public function verifyPassword($pwd, $pwdConfirm) {
+    public function verifyPassword($pwd, $pwdConfirm): void {
         if(strlen($pwd) < 8 ||
             !preg_match('/[a-z]/', $pwd ) ||
             !preg_match('/[A-Z]/', $pwd) ||

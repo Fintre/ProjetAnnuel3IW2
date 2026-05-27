@@ -17,17 +17,8 @@ class SubscriptionRepository extends Base
         ]);
     }
 
-    public function updateColumn(array $data, int $subId): bool {
-        return $this->dbUpdate($this->table, $data, $subId);
-    }
-
     public function updateByUserId(array $data, int $userId): bool {
         return $this->dbUpdateBy($this->table, $data, ['user_id' => $userId]);
-    }
-
-    public function getByCol(array $columns, string $where, string $criteria): array {
-        $data = $this->dbFindByColumnsWhere($this->table, $columns, [$where => $criteria]);
-        return $data[0] ?? [];
     }
 
     public function getFirstByCol(string $column, string $where, mixed $criteria): mixed {
@@ -35,7 +26,4 @@ class SubscriptionRepository extends Base
         return $data[0][$column] ?? null;
     }
 
-    public function delete(int $subId): bool {
-        return $this->dbDelete($this->table, $subId);
-    }
 }
