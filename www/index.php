@@ -1,8 +1,12 @@
 <?php
 
+
+
 namespace App;
 
 session_start();
+require __DIR__ . '/vendor/autoload.php';
+
 
 spl_autoload_register(
     function ($class) {
