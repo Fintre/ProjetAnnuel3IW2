@@ -50,6 +50,15 @@
                 <?php if ($type === 'PRO'): ?>
                     <span class="profil-side-plan-badge">★ PREMIUM</span>
                 <?php endif; ?>
+                <?php if ($type !== 'FREE'): ?>
+                    <form method="POST" action="/unsubscribe" class="profil-side-plan-cancel">
+                        <button type="submit"
+                                onclick="return confirm('Confirmer l\'annulation de votre abonnement ?')"
+                                class="profil-side-plan-cancel-btn">
+                            Annuler mon abonnement
+                        </button>
+                    </form>
+                <?php endif; ?>
             </div>
         </aside>
 

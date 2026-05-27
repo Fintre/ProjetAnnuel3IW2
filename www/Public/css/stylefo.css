@@ -1398,6 +1398,28 @@ h3 {
   opacity: 0.95;
 }
 
+.profil-side-plan-cancel {
+  margin: 0;
+  padding-top: 0.75rem;
+}
+
+.profil-side-plan-cancel-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  color: inherit;
+  opacity: 0.7;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.profil-side-plan-cancel-btn:hover {
+  opacity: 1;
+}
+
 .profil-main {
   grid-column: span 9;
   background-color: var(--cream);

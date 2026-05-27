@@ -122,3 +122,21 @@
   action: renderManageAccounts
   method: GET
   access: auth
+
+/subscribe:
+  controller: Subscription
+  action: subscribe
+  method: POST
+  access: auth
+
+/subscribeSuccess:
+  controller: Subscription
+  action: subscribeSuccess
+  method: GET
+  access: auth
+
+/unsubscribe:
+  controller: Subscription
+  action: unsubscribe
+  method: POST
+  access: auth
