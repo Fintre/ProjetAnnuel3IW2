@@ -123,6 +123,12 @@
   method: GET
   access: auth
 
+/accountDetails:
+  controller: BankAccount
+  action: renderAccountDetails
+  method: GET
+  access: auth
+
 /subscribe:
   controller: Subscription
   action: subscribe
