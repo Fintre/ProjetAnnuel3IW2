@@ -2066,6 +2066,149 @@ h3 {
   background-color: var(--forest);
 }
 
+/* ===== MODAL TRANSACTION ===== */
+
+.acdetail-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+}
+
+.acdetail-modal--open {
+  display: flex;
+}
+
+.acdetail-modal-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(26, 26, 23, 0.45);
+  backdrop-filter: blur(0.15rem);
+}
+
+.acdetail-modal-box {
+  position: relative;
+  z-index: 1;
+  background-color: var(--white-soft);
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  padding: 2.25rem 2.5rem;
+  width: 100%;
+  max-width: 32rem;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-shadow: 0 1.5rem 4rem rgba(26, 26, 23, 0.18);
+}
+
+.acdetail-modal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.acdetail-modal-head-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.acdetail-modal-tag {
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  color: var(--amber);
+}
+
+.acdetail-modal-title {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: var(--weight-title);
+  font-size: var(--text-size-h2);
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.acdetail-modal-close {
+  background: none;
+  border: none;
+  padding: 0.4rem;
+  cursor: pointer;
+  color: var(--ink);
+  opacity: 0.45;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.acdetail-modal-close svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.acdetail-modal-close:hover {
+  opacity: 1;
+}
+
+.acdetail-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.acdetail-modal-toggle-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.acdetail-modal-toggle-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  background-color: var(--ivory);
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  color: var(--ink);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.acdetail-modal-toggle-btn input[type="radio"] {
+  display: none;
+}
+
+.acdetail-modal-toggle-btn:has(input:checked) {
+  background-color: var(--ink);
+  border-color: var(--ink);
+  color: var(--cream);
+}
+
+.acdetail-modal-toggle-btn:hover:not(:has(input:checked)) {
+  background-color: var(--ivory-2);
+  border-color: var(--ink);
+}
+
+.acdetail-modal-hidden {
+  display: none;
+}
+
+.acdetail-modal-recurring-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
 /* ===== ACCOUNT DETAILS ===== */
 
 .acdetail {
