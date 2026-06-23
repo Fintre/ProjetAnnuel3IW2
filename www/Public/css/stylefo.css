@@ -1420,6 +1420,16 @@ h3 {
   opacity: 1;
 }
 
+.profil-side-plan-expires {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid currentColor;
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  opacity: 0.8;
+}
+
 .profil-main {
   grid-column: span 9;
   background-color: var(--cream);

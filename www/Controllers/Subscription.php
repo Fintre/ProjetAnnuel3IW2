@@ -78,23 +78,27 @@ class Subscription extends Base
         $this->isAuth();
 
         $userId = (int) $_SESSION['id'];
-
         $stripeSubId = $this->subscriptionRepository->getFirstByCol('stripe_subscription_id', 'user_id', $userId);
 
-        if (!empty($stripeSubId)) {
-            try {
-                $this->stripeService->cancelSubscription($stripeSubId);
-            } catch (\Exception $e) {
-                // L'abonnement Stripe n'existe peut-être plus, on continue quand même
-            }
+        if (empty($stripeSubId)) {
+            $this->subscriptionRepository->updateByUserId(['type' => 'FREE'], $userId);
+            $_SESSION['subscription_type'] = 'FREE';
+            header("Location: /profil");
+            exit;
         }
 
-        $this->subscriptionRepository->updateByUserId([
-            'type'                   => 'FREE',
-            'stripe_subscription_id' => null,
-        ], $userId);
+        try {
+            $sub = $this->stripeService->cancelSubscription($stripeSubId);
+            $endTimestamp = $sub->cancel_at ?? $sub->items->data[0]->current_period_end ?? strtotime('+1 month');
+            $expirationDate = date('Y-m-d H:i:s', $endTimestamp);
 
-        $_SESSION['subscription_type'] = 'FREE';
+            $this->subscriptionRepository->updateByUserId([
+                'expiration_date' => $expirationDate,
+            ], $userId);
+        } catch (\Exception $e) {
+            $this->subscriptionRepository->updateByUserId(['type' => 'FREE'], $userId);
+            $_SESSION['subscription_type'] = 'FREE';
+        }
 
         header("Location: /profil");
         exit;

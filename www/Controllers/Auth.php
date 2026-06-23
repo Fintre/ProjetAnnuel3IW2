@@ -47,7 +47,20 @@ class Auth extends Base
                     
                     if($isActive === true){
                         $userData = $this->userRepository->getByCol(['email', 'name', 'last_name', 'is_active', 'id', 'is_admin'], 'id', $userId);
-                        $userData['subscription_type'] = $this->subscriptionRepository->getFirstByCol('type', 'user_id', $userId) ?? 'FREE';
+
+                        $currentType = $this->subscriptionRepository->getFirstByCol('type', 'user_id', $userId) ?? 'FREE';
+                        $expiration = $this->subscriptionRepository->getFirstByCol('expiration_date', 'user_id', $userId);
+
+                        if ($currentType !== 'FREE' && !empty($expiration) && strtotime($expiration) < time()) {
+                            $this->subscriptionRepository->updateByUserId([
+                                'type' => 'FREE',
+                                'expiration_date' => null,
+                                'stripe_subscription_id' => null,
+                            ], $userId);
+                            $currentType = 'FREE';
+                        }
+
+                        $userData['subscription_type'] = $currentType;
                         $this->setSessionData($userData);
                         $this->renderPage("userProfil");
                     } else {
@@ -226,7 +239,8 @@ class Auth extends Base
 
     public function renderProfil(): void{
         $this->isAuth();
-        $this->renderPage("userProfil", "headerFooter");
+        $expirationDate = $this->subscriptionRepository->getFirstByCol('expiration_date', 'user_id', $_SESSION["id"]);
+        $this->renderPage("userProfil", "headerFooter", ['expirationDate' => $expirationDate]);
     }
 
     public function renderResetPassword(): void{
