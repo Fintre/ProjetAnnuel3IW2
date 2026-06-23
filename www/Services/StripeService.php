@@ -37,6 +37,8 @@ class StripeService
     }
 
     public function cancelSubscription(string $subscriptionId): Subscription {
-        return Subscription::retrieve($subscriptionId)->cancel();
+        return Subscription::update($subscriptionId, [
+            'cancel_at_period_end' => true,
+        ]);
     }
 }
