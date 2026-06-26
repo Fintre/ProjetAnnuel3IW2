@@ -8,6 +8,7 @@ use App\Model\Account;
 class BankAccountRepository  extends Base
 {
     protected string $table = 'account';
+    protected array $validColumns = ["short_name","description","annual_interest_rate","tax_rate"];
 
     public function store(Account $account): string|false
     {
@@ -40,7 +41,6 @@ class BankAccountRepository  extends Base
             'description'          => $account->getDescription(),
             'annual_interest_rate' => $account->getAnnualInterestRate(),
             'tax_rate'             => $account->getTaxRate(),
-            'solde'                => $account->getSolde(),
         ], $account->getId());
     }
 

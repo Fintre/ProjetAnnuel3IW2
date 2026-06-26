@@ -87,24 +87,43 @@
                         <h2 class="modal-title">Modifier le compte</h2>
                         <button class="close-modal" onclick="closeModal('editModal')">&times;</button>
                     </div>
-                    <form action="/accountEdit" method="POST" class="modal-form">
+                    <form action="/accountEdit" method="POST" class="manage-form">
                         <input type="hidden" name="id" id="edit-id">
-                        <div class="form-group">
-                            <label for="edit-name">Nom du compte</label>
-                            <input type="text" name="short_name" id="edit-name" required>
+
+                        <div class="manage-field">
+                            <div class="manage-field-head">
+                                <label for="edit-name" class="manage-field-label">NOM DU COMPTE *</label>
+                            </div>
+                            <input type="text" name="short_name" id="edit-name" class="manage-field-input" required>
                         </div>
-                        <div class="form-group">
-                            <label for="edit-desc">Description / Type</label>
-                            <input type="text" name="description" id="edit-desc" required>
+
+                        <div class="manage-field">
+                            <div class="manage-field-head">
+                                <label for="edit-desc" class="manage-field-label">DESCRIPTION / TYPE</label>
+                            </div>
+                            <input type="text" name="description" id="edit-desc" class="manage-field-input" required>
                         </div>
-                        <div class="form-group">
-                            <label for="edit-annual_interest_rate">Taux d\'intérêt annuel (%)</label>
-                            <input type="number" name="annual_interest_rate" id="edit-annual_interest_rate" step="0.01" min="0" required>
+
+                        <div class="manage-field">
+                            <div class="manage-field-head">
+                                <label for="edit-annual_interest_rate" class="manage-field-label">TAUX D'INTÉRÊT ANNUEL *</label>
+                            </div>
+                            <div class="manage-field-inputWrap">
+                                <input type="number" name="annual_interest_rate" id="edit-annual_interest_rate" class="manage-field-input" step="0.01" min="0" required>
+                                <span class="manage-field-suffix">%</span>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="edit-tax_rate">Taux d\'imposition (%)</label>
-                            <input type="number" name="tax_rate" id="edit-tax_rate" step="0.01" min="0" required>
+
+                        <div class="manage-field">
+                            <div class="manage-field-head">
+                                <label for="edit-tax_rate" class="manage-field-label">TAUX D'IMPOSITION *</label>
+                            </div>
+                            <div class="manage-field-inputWrap">
+                                <input type="number" name="tax_rate" id="edit-tax_rate" class="manage-field-input" step="0.01" min="0" required>
+                                <span class="manage-field-suffix">%</span>
+                            </div>
                         </div>
+
                         <div class="modal-footer">
                             <button type="button" class="btn-secondary" onclick="closeModal('editModal')">Annuler</button>
                             <button type="submit" class="btn-primary">Enregistrer les modifications</button>
