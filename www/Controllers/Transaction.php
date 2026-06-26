@@ -24,6 +24,11 @@ class Transaction extends Base
         $accountId = (int) ($_GET['account_id'] ?? 0);
         $userId = $this->getCurrentUserId();
 
+        if (!$accountId) {
+            header('Location: /manageAccounts');
+            exit;
+        }
+
         // Vérifier que le compte appartient à l'utilisateur
         $account = $this->accountRepo->findById($accountId);
         if (!$account || $account['user_id'] != $userId) {
@@ -40,6 +45,7 @@ class Transaction extends Base
         $this->isAuth();
         $accountId = (int) ($_POST['account_id'] ?? 0);
         $userId = $this->getCurrentUserId();
+        $transaction->setCategory($_POST['category'] ?? null);
 
         // Vérifier propriété du compte
         $account = $this->accountRepo->findById($accountId);

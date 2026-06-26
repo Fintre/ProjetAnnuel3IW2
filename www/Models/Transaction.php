@@ -14,7 +14,10 @@ class Transaction
     protected float $amount;
     protected string $start_date;
     protected ?string $end_date;
-    protected string $created_at;
+    protected string $created_at;protected ?string $category = null;
+
+    public function getCategory(): ?string { return $this->category; }
+    public function setCategory(?string $category): void { $this->category = $category; }
 
     public function getId(): string { return $this->id; }
     public function setId(string $id): void { $this->id = $id; }

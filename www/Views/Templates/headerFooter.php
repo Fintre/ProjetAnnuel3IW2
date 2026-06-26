@@ -26,6 +26,7 @@
                     <ul class="header-ul">
                         <li><a href="/abonnement" class="header-ul-link">ABONNEMENT</a></li>
                         <li><a href="/accounts" class="header-ul-link">MES COMPTES</a></li>
+                        <li><a href="/manageAccounts" class="header-ul-link">TRANSACTIONS</a></li>
                         <li><a href="/profil" class="header-ul-link">PROFIL</a></li>
                     </ul>
                     <form method="POST" action="/logout" class="header-logout">

@@ -2,6 +2,7 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-8">
+            <a href="/manageAccounts" class="btn btn-link mb-2 ps-0">← Retour à la consultation des comptes</a>
             <h1>Transactions - <?= htmlspecialchars($account['short_name']) ?></h1>
             
             <a href="/transactions/form?account_id=<?= $account['id'] ?>" class="btn btn-primary mb-3">

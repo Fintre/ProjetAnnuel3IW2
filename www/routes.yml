@@ -110,12 +110,14 @@
 /formBankAccount:
   controller: BankAccount
   action: formCreate
+  method: GET
   access: auth
 
 /accounts:
   controller: BankAccount
   action: renderAccounts
   method: GET
+  access: auth
 
 /manageAccounts:
   controller: BankAccount

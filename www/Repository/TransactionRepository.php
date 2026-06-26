@@ -21,6 +21,7 @@ class TransactionRepository extends Base
             'amount'          => $transaction->getAmount(),
             'start_date'      => $transaction->getStartDate(),
             'end_date'        => $transaction->getEndDate(),
+            'category'        => $transaction->getCategory(),
         ]);
     }
 
@@ -50,6 +51,7 @@ class TransactionRepository extends Base
             'amount'          => $transaction->getAmount(),
             'start_date'      => $transaction->getStartDate(),
             'end_date'        => $transaction->getEndDate(),
+            'category'        => $transaction->getCategory(),
         ], $transaction->getId());
     }
 

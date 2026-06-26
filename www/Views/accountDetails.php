@@ -140,9 +140,9 @@ $sep     = $accountId ? '&' : '';
                     <div class="acdetail-group-label"><?= formatDateLabel($date, $frDays, $frMonths) ?></div>
                     <?php foreach ($rows as $t): ?>
                         <div class="acdetail-row">
-                            <span class="acdetail-row-date"><?= (int)date('j', strtotime($t['date'])) ?> <?= strtolower(substr($frMonths[(int)date('n', strtotime($t['date']))], 0, 4)) ?></span>
-                            <span class="acdetail-row-libelle"><?= htmlspecialchars($t['label']) ?></span>
-                            <span class="acdetail-row-cat">
+                            <span class="acdetail-row-date"><?= (int)date('j', strtotime($t['start_date'])) ?> ...</span>
+                            <span class="acdetail-row-libelle"><?= htmlspecialchars($t['short_name']) ?></span>
+                                <span class="acdetail-row-cat">
                                 <span class="acdetail-badge <?= categoryClass($t['category']) ?>"><?= htmlspecialchars($t['category']) ?></span>
                             </span>
                             <span class="acdetail-row-amount <?= $t['amount'] >= 0 ? 'acdetail-row-amount--pos' : 'acdetail-row-amount--neg' ?>">
@@ -171,8 +171,7 @@ $sep     = $accountId ? '&' : '';
             </button>
         </div>
 
-        <form method="POST" action="/createTransaction" class="acdetail-modal-form">
-            <?php if ($accountId): ?>
+            <form method="POST" action="/transactions/create" class="acdetail-modal-form">            <?php if ($accountId): ?>
                 <input type="hidden" name="account_id" value="<?= (int)$accountId ?>">
             <?php endif; ?>
 
@@ -265,7 +264,7 @@ $sep     = $accountId ? '&' : '';
                         <div class="manage-field-head">
                             <label for="tx-start" class="manage-field-label">DATE DE DÉBUT *</label>
                         </div>
-                        <input id="tx-start" class="manage-field-input" type="date" name="start_date_r" value="<?= date('Y-m-d') ?>">
+                        <input id="tx-start" class="manage-field-input" type="date" name="start_date" value="<?= date('Y-m-d') ?>">
                     </div>
                     <div class="manage-field">
                         <div class="manage-field-head">
