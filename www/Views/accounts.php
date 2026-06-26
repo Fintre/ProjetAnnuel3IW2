@@ -53,15 +53,84 @@
                 <h2 class="accounts-list-title">Mes comptes</h2>
                 <a href="/manageAccounts" class="accounts-list-link">GÉRER →</a>
             </div>
-
-            <div class="accounts-list-cards">
+<div class="accounts-list-cards">
                 <?php foreach($accounts as $account): ?>
-                    <a href="/accountDetails?id=<?= $account['id'] ?>" class="accounts-card">
-                        <h3 class="accounts-card-bank"><?= $account['short_name'] ?></h3>
-                        <p class="accounts-card-solde">€<?= number_format($account['solde'], 2, ',', ' ') ?></p>
-                        <p class="accounts-card-type"><?= $account['description'] ?></p>
-                    </a>
+                    <div class="accounts-card" data-account-id="<?= $account['id'] ?>">
+                        <!-- Lien principal vers les détails -->
+                        <a href="/accountDetails?id=<?= $account['id'] ?>" class="accounts-card-link">
+                            <h3 class="accounts-card-bank"><?= $account['short_name'] ?></h3>
+                            <p class="accounts-card-solde">€<?= number_format($account['solde'], 2, ',', ' ') ?></p>
+                            <p class="accounts-card-type"><?= $account['description'] ?></p>
+                        </a>
+
+                        <!-- Groupe d'actions (badges) -->
+                        <div class="accounts-card-actions">
+                            <button class="action-badge edit-badge" 
+                                    onclick="openEditModal('<?= $account['id'] ?>', '<?= htmlspecialchars($account['short_name']) ?>', '<?= htmlspecialchars($account['description']) ?>')"
+                                    title="Modifier">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+                            </button>
+                            <button class="action-badge delete-badge" 
+                                    onclick="openDeleteModal('<?= $account['id'] ?>', '<?= htmlspecialchars($account['short_name']) ?>')"
+                                    title="Supprimer">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                            </button>
+                        </div>
+                    </div>
                 <?php endforeach; ?>
+            </div>
+
+            <!-- MODALE D'ÉDITION -->
+            <div id="editModal" class="modal-overlay">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title">Modifier le compte</h2>
+                        <button class="close-modal" onclick="closeModal('editModal')">&times;</button>
+                    </div>
+                    <form action="/accountEdit" method="POST" class="modal-form">
+                        <input type="hidden" name="id" id="edit-id">
+                        <div class="form-group">
+                            <label for="edit-name">Nom du compte</label>
+                            <input type="text" name="short_name" id="edit-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-desc">Description / Type</label>
+                            <input type="text" name="description" id="edit-desc" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-annual_interest_rate">Taux d\'intérêt annuel (%)</label>
+                            <input type="number" name="annual_interest_rate" id="edit-annual_interest_rate" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-tax_rate">Taux d\'imposition (%)</label>
+                            <input type="number" name="tax_rate" id="edit-tax_rate" step="0.01" min="0" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn-secondary" onclick="closeModal('editModal')">Annuler</button>
+                            <button type="submit" class="btn-primary">Enregistrer les modifications</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- MODALE DE SUPPRESSION -->
+            <div id="deleteModal" class="modal-overlay">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title">Confirmer la suppression</h2>
+                        <button class="close-modal" onclick="closeModal('deleteModal')">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Êtes-vous sûr de vouloir supprimer le compte <strong id="delete-account-name"></strong> ?</p>
+                        <p class="txt-warning">Cette action est irréversible.</p>
+                    </div>
+                    <form action="/accountDelete" method="POST" class="modal-footer">
+                        <input type="hidden" name="id" id="delete-id">
+                        <button type="button" class="btn-secondary" onclick="closeModal('deleteModal')">Annuler</button>
+                        <button type="submit" class="btn-danger">Supprimer définitivement</button>
+                    </form>
+                </div>
+            </div>
             </div>
         </section>
     <?php endif; ?>

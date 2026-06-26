@@ -185,5 +185,96 @@ class BankAccount extends Base
             'categoryFilter'  => $categoryFilter,
         ]);
     }
+
+    public function accountDelete(): void
+    {
+        // Vérifier que la requête est bien de type POST
+        if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+            // Rediriger ou afficher une erreur si la méthode n\'est pas POST
+            header("Location: /dashboard"); // Exemple de redirection
+            exit();
+        }
+
+        // Récupérer l\'ID du compte à supprimer depuis le formulaire
+        $accountId = $_POST["id"];
+        // Récupérer l\'ID de l\'utilisateur actuellement connecté
+        $currentUserId = $this->getCurrentUserId();
+
+        // Vérifier que l\'ID du compte est valide et que l\'utilisateur est connecté
+        if ($accountId === false || $accountId === null) {
+            $_SESSION["error_message"] = "ID de compte invalide.";
+            header("Location: /dashboard");
+            exit();
+        }
+
+        // 1. Récupérer les informations du compte pour vérifier la propriété
+        $account = $this->dbFindById("account", $accountId);
+
+        if (!$account) {
+            header("Location: /dashboard");
+            exit();
+        }
+
+        // 2. Vérification CRITIQUE : S\'assurer que le compte appartient à l\'utilisateur connecté
+        if ($account['user_id'] !== $currentUserId) {
+            header("Location: /dashboard");
+            exit();
+        }
+
+        // 3. Si la vérification de propriété est passée, procéder à la suppression
+        $deleted = $this->dbDelete("account", $accountId);
+
+        // Rediriger l\'utilisateur vers une page appropriée
+        header("Location: /accounts");
+        exit();
+    }
+
+    public function accountEdit(): void
+    {
+        if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+            header("Location: /dashboard");
+            exit();
+        }
+        $accountId = $_POST["id"];
+
+        $currentUserId = $this->getCurrentUserId();
+
+        if ($accountId === false || $accountId === null) {
+            header("Location: /dashboard");
+            exit();
+        }
+
+        $account = $this->dbFindById("account", $accountId);
+
+        if (!$account) {
+            header("Location: /dashboard");
+            exit();
+        }
+
+        if ($account['user_id'] !== $currentUserId) {
+            header("Location: /dashboard");
+            exit();
+        }
+
+        $data = [
+            'short_name' => $_POST["short_name"],
+            'description' => $_POST["description"],
+            'annual_interest_rate' => $_POST["annual_interest_rate"],
+            'tax_rate' => $_POST["tax_rate"],
+        ];
+
+        //Est-ce que on considère que c'est au user de changer les valeurs de taxe/taux annuel si ça change ou a nous ?
+
+        $updated = $this->dbUpdate("account", $data, $accountId);
+
+        if ($updated) {
+            $_SESSION["success_message"] = "Le compte bancaire a été mis à jour avec succès.";
+        } else {
+            $_SESSION["error_message"] = "Une erreur est survenue lors de la mise à jour du compte.";
+        }
+
+        header("Location: /dashboard");
+        exit();
+    }
 }
 
