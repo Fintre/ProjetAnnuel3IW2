@@ -1,8 +1,6 @@
 <?php
-
 namespace App\Controller;
-
-use App\Model\Transaction;
+use App\Model\Transaction as TransactionModel;
 use App\Repository\TransactionRepository;
 use App\Repository\BankAccountRepository;
 
@@ -28,52 +26,43 @@ class Transaction extends Base
             header('Location: /manageAccounts');
             exit;
         }
-
-        // Vérifier que le compte appartient à l'utilisateur
-        $account = $this->accountRepo->findById($accountId);
-        if (!$account || $account['user_id'] != $userId) {
-            http_response_code(403);
-            exit('Accès refusé');
-        }
-
-        $transactions = $this->transactionRepo->findByAccount($accountId);
-        $this->renderPage('transactions', ['transactions' => $transactions, 'account' => $account]);
     }
 
-    public function create(): void
-    {
-        $this->isAuth();
-        $accountId = (int) ($_POST['account_id'] ?? 0);
-        $userId = $this->getCurrentUserId();
-        $transaction->setCategory($_POST['category'] ?? null);
+public function create(): void
+{
+    $this->isAuth();
+    $accountId = (int) ($_POST['account_id'] ?? 0);
+    $userId = $this->getCurrentUserId();
 
-        // Vérifier propriété du compte
-        $account = $this->accountRepo->findById($accountId);
-        if (!$account || $account['user_id'] != $userId) {
-            http_response_code(403);
-            exit('Accès refusé');
-        }
+    // Vérifier propriété du compte
+    $account = $this->accountRepo->findById($accountId);
+    if (!$account || $account['user_id'] != $userId) {
+        http_response_code(403);
+        exit('Accès refusé');
+    }
 
-        if (empty($_POST['type']) || empty($_POST['short_name']) || empty($_POST['amount'])) {
-            header("Location: /transactions?account_id=$accountId");
-            exit;
-        }
-
-        $transaction = new Transaction();
-        $transaction->setAccountId($accountId);
-        $transaction->setType($_POST['type']); // 'expense' ou 'income'
-        $transaction->setShortName($_POST['short_name']);
-        $transaction->setDescription($_POST['description'] ?? '');
-        $transaction->setFrequency($_POST['frequency'] ?? 'ONE_TIME'); // ONE_TIME ou RECURRING
-        $transaction->setIntervalMonths((int) ($_POST['interval_months'] ?? 1));
-        $transaction->setAmount((float) $_POST['amount']);
-        $transaction->setStartDate($_POST['start_date']);
-        $transaction->setEndDate($_POST['end_date'] ?? null);
-
-        $this->transactionRepo->store($transaction);
+    if (empty($_POST['type']) || empty($_POST['short_name']) || empty($_POST['amount'])) {
         header("Location: /transactions?account_id=$accountId");
         exit;
     }
+
+    $transaction = new TransactionModel();
+    $transaction->setAccountId($accountId);
+    $transaction->setType($_POST['type']); // 'expense' ou 'income'
+    $transaction->setShortName($_POST['short_name']);
+    $transaction->setDescription($_POST['description'] ?? '');
+    $transaction->setCategory($_POST['category'] ?? null);
+    $transaction->setFrequency($_POST['frequency'] ?? 'ONE_TIME'); // ONE_TIME ou RECURRING
+    $transaction->setIntervalMonths((int) ($_POST['interval_months'] ?? 1));
+    $transaction->setAmount((float) $_POST['amount']);
+    $transaction->setStartDate($_POST['start_date']);
+    $transaction->setEndDate(!empty($_POST['end_date']) ? $_POST['end_date'] : null);
+    $this->transactionRepo->store($transaction);
+    $delta = $transaction->getType() === 'income' ? $transaction->getAmount() : -$transaction->getAmount();
+    $this->accountRepo->adjustSolde($accountId, $delta);
+    header("Location: /accountDetails?id=$accountId");    
+    exit;
+}
 
     public function formCreate(): void
     {
@@ -101,7 +90,7 @@ class Transaction extends Base
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $transactionObj = new Transaction();
+            $transactionObj = new TransactionModel();
             $transactionObj->setId($id);
             $transactionObj->setAccountId($transaction['account_id']);
             $transactionObj->setType($_POST['type']);
@@ -111,9 +100,9 @@ class Transaction extends Base
             $transactionObj->setIntervalMonths((int) ($_POST['interval_months'] ?? 1));
             $transactionObj->setAmount((float) $_POST['amount']);
             $transactionObj->setStartDate($_POST['start_date']);
-            $transactionObj->setEndDate($_POST['end_date'] ?? null);
-
+            $transactionObj->setEndDate(!empty($_POST['end_date']) ? $_POST['end_date'] : null);
             $this->transactionRepo->update($transactionObj);
+    
             header("Location: /transactions?account_id=" . $transaction['account_id']);
             exit;
         }
@@ -138,7 +127,8 @@ class Transaction extends Base
             http_response_code(403);
             exit('Accès refusé');
         }
-
+        $delta = $transaction['type'] === 'income' ? -(float)$transaction['amount'] : (float)$transaction['amount'];
+        $this->accountRepo->adjustSolde((int)$transaction['account_id'], $delta);
         $this->transactionRepo->destroy($id);
         header("Location: /transactions?account_id=" . $transaction['account_id']);
         exit;

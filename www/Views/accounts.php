@@ -55,24 +55,16 @@
             </div>
 
             <div class="accounts-list-cards">
-                <?php foreach($accounts as $account): ?>
-                    <a href="/transactions?account_id=<?= $account['id'] ?>" class="accounts-card">
-                        <div class="accounts-card-content">
-                            <h3 class="accounts-card-bank"><?= $account['short_name'] ?></h3>
-                            <p class="accounts-card-solde">€<?= number_format($account['solde'], 2, ',', ' ') ?></p>
-                            <p class="accounts-card-type"><?= $account['description'] ?></p>
-                        </div>
-                        <div class="accounts-card-actions">
-                            <span class="accounts-card-link">
-                                Transactions →
-                            </span>
-                            <a href="/manageAccounts" class="accounts-card-link" onclick="event.stopPropagation()">
-                                Consulter →
-                            </a>
-                        </div>
-                    </a>
-                <?php endforeach; ?>
+    <?php foreach($accounts as $account): ?>
+        <a href="/accountDetails?id=<?= $account['id'] ?>" class="accounts-card">
+            <div class="accounts-card-content">
+                <h3 class="accounts-card-bank"><?= $account['short_name'] ?></h3>
+                <p class="accounts-card-solde">€<?= number_format($account['solde'], 2, ',', ' ') ?></p>
+                <p class="accounts-card-type"><?= $account['description'] ?></p>
             </div>
+        </a>
+    <?php endforeach; ?>
+</div>
         </section>
     <?php endif; ?>
 </main>
