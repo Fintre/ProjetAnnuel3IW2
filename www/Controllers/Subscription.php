@@ -66,6 +66,8 @@ class Subscription extends Base
             'type'                   => $newType,
             'stripe_customer_id'     => $session->customer,
             'stripe_subscription_id' => $session->subscription,
+            'start_date'             => date('Y-m-d H:i:s'),
+            'expiration_date'        => date('Y-m-d H:i:s', strtotime('+1 month')),
         ], $userId);
 
         $_SESSION['subscription_type'] = $newType;

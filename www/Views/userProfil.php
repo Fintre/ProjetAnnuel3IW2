@@ -43,24 +43,14 @@
                 ];
                 $plan = $planMap[$type] ?? $planMap['FREE'];
             ?>
-            <?php $hasPendingCancel = !empty($expirationDate) && strtotime($expirationDate) > time(); ?>
             <div class="profil-side-plan profil-side-plan-<?= strtolower($type) ?>">
                 <p class="profil-side-plan-label">PLAN ACTUEL</p>
                 <p class="profil-side-plan-name"><?= $plan['name'] ?></p>
-                <p class="profil-side-plan-price"><?= $plan['price'] ?></p>
                 <?php if ($type === 'PRO'): ?>
                     <span class="profil-side-plan-badge">★ PREMIUM</span>
                 <?php endif; ?>
-                <?php if ($hasPendingCancel): ?>
+                <?php if ($type !== 'FREE' && !empty($expirationDate)): ?>
                     <p class="profil-side-plan-expires">Expire le <?= date('d/m/Y', strtotime($expirationDate)) ?></p>
-                <?php elseif ($type !== 'FREE'): ?>
-                    <form method="POST" action="/unsubscribe" class="profil-side-plan-cancel">
-                        <button type="submit"
-                                onclick="return confirm('Confirmer l\'annulation de votre abonnement ? Vous garderez vos avantages jusqu\'à la fin de la période.')"
-                                class="profil-side-plan-cancel-btn">
-                            Annuler mon abonnement
-                        </button>
-                    </form>
                 <?php endif; ?>
             </div>
         </aside>
