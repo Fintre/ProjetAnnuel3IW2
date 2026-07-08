@@ -27,8 +27,8 @@ class StripeService
                 'user_id' => $userId,
                 'plan'    => strtoupper($plan),
             ],
-            'success_url' => 'http://localhost:1001/subscribeSuccess?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url'  => 'http://localhost:1001/abonnement',
+            'success_url' => 'https://roarr.fr/subscribeSuccess?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url'  => 'https://roarr.fr/abonnement',
         ]);
     }
 
