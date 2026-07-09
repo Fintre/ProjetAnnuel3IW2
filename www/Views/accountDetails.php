@@ -163,7 +163,7 @@ $sep     = $accountId ? '&' : '';
 <section class="proj screen-size">
  
     <div class="proj-head">
-        <span class="proj-tag">§ PROJECTION</span>
+        <span class="proj-tag">PROJECTION</span>
         <h2 class="proj-title">Simulation.</h2>
         <p class="proj-desc">Estimez l'état de ce compte à une date future en tenant compte des transactions récurrentes, des intérêts annuels (<?= number_format($account['annual_interest_rate'] ?? 0, 2) ?>%) et du taux d'imposition (<?= number_format($account['tax_rate'] ?? 0, 2) ?>%).</p>
     </div>
@@ -219,187 +219,6 @@ $sep     = $accountId ? '&' : '';
     </div>
  
 </section>
- 
-<style>
-.proj {
-    padding: 5rem 0;
-    border-top: 1px solid rgba(0,0,0,0.08);
-}
-.proj-head { margin-bottom: 2.5rem; }
-.proj-tag {
-    font-size: 0.72rem;
-    letter-spacing: 0.12em;
-    opacity: 0.45;
-    display: block;
-    margin-bottom: 0.5rem;
-}
-.proj-title {
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 700;
-    margin: 0 0 0.6rem;
-    line-height: 1.1;
-}
-.proj-desc {
-    font-size: 0.92rem;
-    opacity: 0.55;
-    max-width: 60ch;
-    line-height: 1.6;
-}
- 
-/* Date picker */
-.proj-controls { margin-bottom: 2.5rem; }
-.proj-control-group { display: flex; flex-direction: column; gap: 0.5rem; }
-.proj-label {
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-    opacity: 0.5;
-}
-.proj-date-input {
-    background: rgba(0,0,0,0.04);
-    border: 1px solid rgba(0,0,0,0.12);
-    border-radius: 0.5rem;
-    padding: 0.6rem 1rem;
-    font-size: 0.9rem;
-    outline: none;
-    cursor: pointer;
-    width: fit-content;
-    min-width: 200px;
-    transition: border-color 0.2s;
-}
-.proj-date-input:focus { border-color: #1a3a2a; }
-.proj-date-hint {
-    font-size: 0.75rem;
-    opacity: 0.45;
-    letter-spacing: 0.04em;
-}
- 
-/* Sim rows */
-.proj-sim { margin-bottom: 2.5rem; }
-.proj-sim-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-}
-.proj-sim-label {
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-    opacity: 0.5;
-}
-.proj-sim-hint {
-    font-size: 0.65rem;
-    opacity: 0.6;
-    font-style: italic;
-}
-.proj-sim-add {
-    font-size: 0.75rem;
-    letter-spacing: 0.08em;
-    background: #1a3a2a;
-    color: #faf6ec;
-    border: none;
-    padding: 0.45rem 1rem;
-    border-radius: 2rem;
-    cursor: pointer;
-    transition: opacity 0.2s;
-}
-.proj-sim-add:hover { opacity: 0.8; }
-.proj-sim-rows-wrap { display: flex; flex-direction: column; gap: 0.5rem; }
-.proj-sim-row {
-    display: grid;
-    grid-template-columns: 1.5fr 120px 120px 120px 32px;
-    gap: 0.6rem;
-    align-items: center;
-    padding: 0.7rem 0.8rem;
-    background: rgba(0,0,0,0.02);
-    border-radius: 0.5rem;
-    border: 1px solid rgba(0,0,0,0.06);
-}
-.proj-sim-input {
-    background: #fff;
-    border: 1px solid rgba(0,0,0,0.1);
-    border-radius: 0.4rem;
-    padding: 0.4rem 0.7rem;
-    font-size: 0.83rem;
-    width: 100%;
-    outline: none;
-    transition: border-color 0.2s;
-}
-.proj-sim-input:focus { border-color: #1a3a2a; }
-.proj-sim-select {
-    background: #fff;
-    border: 1px solid rgba(0,0,0,0.1);
-    border-radius: 0.4rem;
-    padding: 0.4rem 0.5rem;
-    font-size: 0.83rem;
-    width: 100%;
-    outline: none;
-    cursor: pointer;
-}
-.proj-sim-remove {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1rem;
-    opacity: 0.3;
-    padding: 0;
-    line-height: 1;
-    transition: opacity 0.2s;
-}
-.proj-sim-remove:hover { opacity: 0.7; }
- 
-/* Results */
-.proj-results {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    gap: 1rem;
-    margin-bottom: 2.5rem;
-}
-@media (max-width: 1100px) {
-    .proj-results { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 700px) {
-    .proj-results { grid-template-columns: 1fr; }
-    .proj-sim-row { grid-template-columns: 1fr 1fr; }
-}
-.proj-result-card {
-    background: rgba(0,0,0,0.03);
-    border-radius: 0.8rem;
-    padding: 1.4rem 1.6rem;
-    border: 1px solid rgba(0,0,0,0.06);
-}
-.proj-result-card--main {
-    background: #1a3a2a;
-    color: #faf6ec;
-    border-color: transparent;
-}
-.proj-result-label {
-    font-size: 0.68rem;
-    letter-spacing: 0.1em;
-    opacity: 0.55;
-    margin-bottom: 0.5rem;
-}
-.proj-result-value {
-    font-size: 1.6rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    margin-bottom: 0.3rem;
-}
-.proj-result-value--pos { color: #2a7a4a; }
-.proj-result-value--neg { color: #c0392b; }
-.proj-result-sub {
-    font-size: 0.7rem;
-    opacity: 0.45;
-    letter-spacing: 0.03em;
-}
- 
-.proj-chart-wrap {
-    background: rgba(0,0,0,0.02);
-    border-radius: 0.8rem;
-    border: 1px solid rgba(0,0,0,0.06);
-    padding: 1.5rem;
-}
-</style>
- 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
  
 <script>
@@ -629,7 +448,7 @@ runProjection();
 
         <div class="acdetail-modal-head">
             <div class="acdetail-modal-head-left">
-                <span class="acdetail-modal-tag">§ NOUVELLE TRANSACTION</span>
+                <span class="acdetail-modal-tag">NOUVELLE TRANSACTION</span>
                 <h2 class="acdetail-modal-title">Ajouter.</h2>
             </div>
             <button type="button" class="acdetail-modal-close" onclick="document.getElementById('modal-add-transaction').classList.remove('acdetail-modal--open')">
