@@ -1,19 +1,53 @@
 <?php if (!empty($errors)): ?>
-    <ul>
-        <?php foreach ($errors as $error): ?> 
-            <li><?= $error ; ?></li>
-        <?php endforeach; ?>
-    </ul>
+    <div class="login-errors">
+        <ul>
+            <?php foreach ($errors as $error): ?>
+                <li><?= $error ; ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
 <?php endif; ?>
 
-<h2>Reset votre mdp</h2>
-<a href="/">Home Page</a>
-<a href="/login">Connection Page</a>
+<main class="login">
+    <section class="login-hero">
+        <div class="login-hero-top">
+            <a href="/" class="login-hero-logo">Roar<span class="login-hero-logo-color">r.</span></a>
+            <span class="login-hero-badge">MOT DE PASSE</span>
+        </div>
 
-<div class="form">
-    <h2>Reset mot de passe</h2>
-    <form method="POST" action="/sendNewPassword">
-        <input type="email" value="<?= $_POST["email"] ?? "" ?>" required name="email" placeholder="Votre email"><br>
-        <input class="btn btn_green" type="submit">
-    </form>
-</div>
+        <div class="login-hero-body">
+            <span class="login-hero-eyebrow">RÉCUPÉRATION</span>
+            <h1 class="login-hero-title">
+                Un lien pour<br>
+                <span class="login-hero-title-em">reprendre</span><br>
+                votre accès.
+            </h1>
+            <p class="login-hero-lead">
+                Entrez votre email pour recevoir un lien de réinitialisation. Aucune donnée n'est modifiée tant que vous ne l'avez pas confirmé.
+            </p>
+        </div>
+    </section>
+
+    <section class="login-form">
+        <div class="login-form-head">
+            <h2 class="login-form-title">Réinitialiser</h2>
+            <p class="login-form-sub">RECEVOIR UN LIEN PAR EMAIL</p>
+        </div>
+
+        <form method="POST" action="/sendNewPassword" class="login-fields">
+            <div class="login-field">
+                <label for="reset-email" class="login-field-label">ADRESSE EMAIL</label>
+                <input id="reset-email" class="login-field-input" type="email" value="<?= $_POST["email"] ?? "" ?>" required name="email" placeholder="Votre email">
+            </div>
+
+            <button class="login-submit" type="submit">
+                Envoyer le lien
+                <svg class="login-submit-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M13.2328 16.4569C12.9328 16.7426 12.9212 17.2173 13.2069 17.5172C13.4926 17.8172 13.9673 17.8288 14.2672 17.5431L13.2328 16.4569ZM19.5172 12.5431C19.8172 12.2574 19.8288 11.7827 19.5431 11.4828C19.2574 11.1828 18.7827 11.1712 18.4828 11.4569L19.5172 12.5431ZM18.4828 12.5431C18.7827 12.8288 19.2574 12.8172 19.5431 12.5172C19.8288 12.2173 19.8172 11.7426 19.5172 11.4569L18.4828 12.5431ZM14.2672 6.4569C13.9673 6.17123 13.4926 6.18281 13.2069 6.48276C12.9212 6.78271 12.9328 7.25744 13.2328 7.5431L14.2672 6.4569ZM19 12.75C19.4142 12.75 19.75 12.4142 19.75 12C19.75 11.5858 19.4142 11.25 19 11.25V12.75ZM5 11.25C4.58579 11.25 4.25 11.5858 4.25 12C4.25 12.4142 4.58579 12.75 5 12.75V11.25ZM14.2672 17.5431L19.5172 12.5431L18.4828 11.4569L13.2328 16.4569L14.2672 17.5431ZM19.5172 11.4569L14.2672 6.4569L13.2328 7.5431L18.4828 12.5431L19.5172 11.4569ZM19 11.25L5 11.25V12.75L19 12.75V11.25Z" fill="#faf6ec"></path> </g></svg>
+            </button>
+        </form>
+
+        <p class="login-form-alt">
+            Vous vous souvenez ? <a href="/login" class="login-form-link">Se connecter</a>
+        </p>
+    </section>
+</main>
