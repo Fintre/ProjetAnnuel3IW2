@@ -3,8 +3,9 @@
         <title>Roarr</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script>
-        (function(){var s=localStorage.getItem('theme');var t=s||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
+        (function(){var s=localStorage.getItem('theme');var t=s||'light';document.documentElement.setAttribute('data-theme',t);})();
         function toggleTheme(){var c=document.documentElement.getAttribute('data-theme');var n=c==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('theme',n);}
+        function toggleBurger(){document.body.classList.toggle('header-mobile-open');}
         </script>
         <link rel="stylesheet" href="/Public/css/stylefo.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,26 +17,27 @@
             <nav class="header">
                 <?php if(empty($_SESSION['is_active'])): ?>
                     <a href="/" class="header-logo">Roar<span class="header-logo-color">r.</span></a>
-                    <ul class="header-ul">
-                        <li><a href="/abonnement" class="header-ul-link">Abonnement</a></li>
-
-                    </ul>
 
                     <div class="header-auth">
                         <button type="button" class="header-theme" onclick="toggleTheme()" aria-label="Basculer thème">
                             <svg class="header-theme-icon header-theme-moon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="currentColor"/></svg>
                             <svg class="header-theme-icon header-theme-sun" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4" fill="currentColor"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
                         </button>
+                        <a href="/abonnement" class="header-ul-link">Abonnement</a>
                         <a href="/login" class="header-auth-link header-auth-link-log">Se connecter</a>
-                        <a href="/signup" class="header-auth-link link-button">Commencer</a>
+                        <a href="/signup" class="header-auth-link link-button">S'inscrire</a>
                     </div>
+                    <button type="button" class="header-burger" onclick="toggleBurger()" aria-label="Menu">
+                        <span class="header-burger-line"></span>
+                        <span class="header-burger-line"></span>
+                        <span class="header-burger-line"></span>
+                    </button>
                 <?php else: ?>
                     <a href="/accounts" class="header-logo">Roar<span class="header-logo-color">r.</span></a>
                     <ul class="header-ul">
-                        <li><a href="/abonnement" class="header-ul-link">ABONNEMENT</a></li>
-                        <li><a href="/accounts" class="header-ul-link">MES COMPTES</a></li>
-                        <li><a href="/manageAccounts" class="header-ul-link">TRANSACTIONS</a></li>
-                        <li><a href="/profil" class="header-ul-link">PROFIL</a></li>
+                        <li><a href="/abonnement" class="header-ul-link">Abonnement</a></li>
+                        <li><a href="/accounts" class="header-ul-link">Mes comptes</a></li>
+                        <li><a href="/profil" class="header-ul-link">Profil</a></li>
                     </ul>
                     <div class="header-actions">
                         <button type="button" class="header-theme" onclick="toggleTheme()" aria-label="Basculer thème">
@@ -48,9 +50,40 @@
                             </button>
                         </form>
                     </div>
+                    <button type="button" class="header-burger" onclick="toggleBurger()" aria-label="Menu">
+                        <span class="header-burger-line"></span>
+                        <span class="header-burger-line"></span>
+                        <span class="header-burger-line"></span>
+                    </button>
                 <?php endif; ?>
             </nav>
         </header>
+
+        <div class="header-mobile-backdrop" onclick="toggleBurger()"></div>
+        <aside class="header-mobile">
+            <button type="button" class="header-mobile-close" onclick="toggleBurger()" aria-label="Fermer">×</button>
+            <?php if(empty($_SESSION['is_active'])): ?>
+                <div class="header-mobile-head">
+                    <button type="button" class="header-mobile-cta" onclick="toggleTheme()">Changer de thème</button>
+                    <a href="/login" class="header-mobile-cta">Se connecter</a>
+                    <a href="/signup" class="header-mobile-cta header-mobile-cta-primary">S'inscrire</a>
+                </div>
+                <a href="/abonnement" class="header-mobile-cta">Abonnement</a>
+            <?php else: ?>
+                <ul class="header-mobile-nav">
+                    <li><a href="/abonnement" class="header-mobile-link">Abonnement</a></li>
+                    <li><a href="/accounts" class="header-mobile-link">Mes comptes</a></li>
+                    <li><a href="/profil" class="header-mobile-link">Profil</a></li>
+                </ul>
+                <div class="header-mobile-foot">
+                    <button type="button" class="header-mobile-cta" onclick="toggleTheme()">Changer de thème</button>
+                    <form method="POST" action="/logout" class="header-mobile-logout">
+                        <button type="submit" class="header-mobile-logout-btn">Déconnexion</button>
+                    </form>
+                </div>
+            <?php endif; ?>
+        </aside>
+
         <?php include $this->pathView;?>
     </body>
 </html>
