@@ -1,6 +1,6 @@
 <main class="abonnement">
     <section class="abo-head screen-size">
-        <span class="abo-head-tag">§ TARIFS</span>
+        <span class="abo-head-tag">TARIFS</span>
         <h1 class="abo-head-title">
             Deux formules.<br>
             <span class="abo-head-title-em">Pas de superflu.</span>
@@ -18,7 +18,7 @@
 
             <div class="abo-card-head">
                 <h2 class="abo-card-name">Roarr <span class="abo-card-name-em">Plus</span></h2>
-                <span class="abo-card-num">§01</span>
+                <span class="abo-card-num">01</span>
             </div>
             <p class="abo-card-sub">Pour suivre et anticiper l'essentiel.</p>
 
@@ -61,7 +61,7 @@
             <input type="hidden" name="plan" value="pro">
             <div class="abo-card-head">
                 <h2 class="abo-card-name">Roarr <span class="abo-card-name-em">Pro</span></h2>
-                <span class="abo-card-num">§02</span>
+                <span class="abo-card-num">02</span>
             </div>
             <p class="abo-card-sub">Pour gérer un patrimoine complet, sans limite.</p>
 

@@ -1,9 +1,11 @@
 <main class="accounts">
     <section class="accounts-head screen-size">
-        <span class="accounts-head-tag">BONJOUR <?= strtoupper($_SESSION["name"] ?? "") ?> —</span>
+        <span class="accounts-head-tag">BONJOUR <?= strtoupper($_SESSION["name"] ?? "") ?></span>
         <div class="accounts-head-row">
-            <h1 class="accounts-head-title">Vue d'ensemble.</h1>
-            <a href="/manageAccounts" class="accounts-head-cta">+ Ajouter un compte bancaire</a>
+            <h1 class="accounts-head-title">Mes comptes</h1>
+            <?php if (!empty($accounts)): ?>
+                <a href="/manageAccounts" class="accounts-head-cta">+ Ajouter un compte bancaire</a>
+            <?php endif; ?>
         </div>
     </section>
 
@@ -25,35 +27,7 @@
             </div>
         </section>
     <?php else: ?>
-        <section class="accounts-stats screen-size">
-            <div class="accounts-stats-card">
-                <p class="accounts-stats-label">PATRIMOINE TOTAL</p>
-                <p class="accounts-stats-value">€<?= number_format(array_sum(array_column($accounts, 'solde')), 2, ',', ' ') ?></p>
-                <p class="accounts-stats-sub">Cumul de vos comptes</p>
-            </div>
-            <div class="accounts-stats-card">
-                <p class="accounts-stats-label">REVENUS DU MOIS</p>
-                <p class="accounts-stats-value">€0</p>
-                <p class="accounts-stats-sub">Pas encore de transactions</p>
-            </div>
-            <div class="accounts-stats-card">
-                <p class="accounts-stats-label">DÉPENSES DU MOIS</p>
-                <p class="accounts-stats-value">€0</p>
-                <p class="accounts-stats-sub">Pas encore de transactions</p>
-            </div>
-            <div class="accounts-stats-card">
-                <p class="accounts-stats-label">ÉPARGNE MENSUELLE</p>
-                <p class="accounts-stats-value">€0</p>
-                <p class="accounts-stats-sub">Pas encore de transactions</p>
-            </div>
-        </section>
-
         <section class="accounts-list screen-size">
-            <div class="accounts-list-head">
-                <h2 class="accounts-list-title">Mes comptes</h2>
-                <a href="/manageAccounts" class="accounts-list-link">GÉRER →</a>
-            </div>
-
             <div class="accounts-list-cards">
                 <?php foreach($accounts as $account): ?>
                     <a href="/accountDetails?id=<?= $account['id'] ?>" class="accounts-card">
@@ -62,6 +36,34 @@
                         <p class="accounts-card-type"><?= $account['description'] ?></p>
                     </a>
                 <?php endforeach; ?>
+            </div>
+        </section>
+
+        <section class="accounts-list screen-size">
+            <div class="accounts-list-head">
+                <h2 class="accounts-list-title">Vue d'ensemble</h2>
+            </div>
+            <div class="accounts-stats">
+                <div class="accounts-stats-card">
+                    <p class="accounts-stats-label">PATRIMOINE TOTAL</p>
+                    <p class="accounts-stats-value">€<?= number_format(array_sum(array_column($accounts, 'solde')), 2, ',', ' ') ?></p>
+                    <p class="accounts-stats-sub">Cumul de vos comptes</p>
+                </div>
+                <div class="accounts-stats-card">
+                    <p class="accounts-stats-label">REVENUS DU MOIS</p>
+                    <p class="accounts-stats-value">€0</p>
+                    <p class="accounts-stats-sub">Pas encore de transactions</p>
+                </div>
+                <div class="accounts-stats-card">
+                    <p class="accounts-stats-label">DÉPENSES DU MOIS</p>
+                    <p class="accounts-stats-value">€0</p>
+                    <p class="accounts-stats-sub">Pas encore de transactions</p>
+                </div>
+                <div class="accounts-stats-card">
+                    <p class="accounts-stats-label">ÉPARGNE MENSUELLE</p>
+                    <p class="accounts-stats-value">€0</p>
+                    <p class="accounts-stats-sub">Pas encore de transactions</p>
+                </div>
             </div>
         </section>
     <?php endif; ?>
