@@ -67,6 +67,9 @@
                     <p class="accounts-stats-sub">Pas encore de transactions</p>
                 </div>
             </div>
+        </a>
+    <?php endforeach; ?>
+</div>
         </section>
     <?php endif; ?>
 </main>
