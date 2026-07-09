@@ -43,8 +43,10 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      PGADMIN_CONFIG_SESSION_COOKIE_SECURE: "False"
+      PGADMIN_CONFIG_WTF_CSRF_ENABLED: "False"
     ports:
-      - "1003:80" # Accès pgAdmin -> http://localhost:5050
+      - "1003:80"
     volumes:
       - pgadmin-data:/var/lib/pgadmin
     depends_on:
