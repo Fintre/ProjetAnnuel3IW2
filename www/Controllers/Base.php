@@ -65,12 +65,12 @@ abstract class Base
         return null;
     }
 
-    protected function dbInsert(string $table, array $data): string|false
+    protected function dbInsert(string $table, array $data, string $returning = 'id'): string|false
 {
     $columns = implode(', ', array_keys($data));
     $placeholders = implode(', ', array_map(fn($k) => ":$k", array_keys($data)));
 
-    $sql = "INSERT INTO {$table} ({$columns}) VALUES ({$placeholders}) RETURNING id";
+    $sql = "INSERT INTO {$table} ({$columns}) VALUES ({$placeholders}) RETURNING {$returning}";
 
     $stmt = $this->db->getConnection()->prepare($sql);
 
@@ -80,7 +80,7 @@ abstract class Base
 
     if ($stmt->execute()) {
         $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-        return $row['id'] ?? false;
+        return $row[$returning] ?? false;
     }
 
     return false;
