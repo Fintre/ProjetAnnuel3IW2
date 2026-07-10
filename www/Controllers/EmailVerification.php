@@ -31,16 +31,19 @@ class EmailVerification extends Base
     }
 
     public function sendVerificationMail($email, $token, $subject, $path){
-        $activationLink = "http://localhost:1001/".$path."?email=".$email."&token=".$token;
+        $activationLink = getenv('APP_URL') . "/" . $path . "?email=" . $email . "&token=" . $token;
         $mail = new PHPMailer(true);
         try {
             $mail->SMTPDebug = 0;
             $mail->isSMTP();
-            $mail->Host       = 'mailpit';
-            $mail->SMTPAuth   = false;
-            $mail->Port       = 1025;
+            $mail->Host       = getenv('MAIL_HOST');
+            $mail->Port       = (int) getenv('MAIL_PORT');
+            $mail->SMTPAuth   = !empty(getenv('MAIL_USER'));
+            $mail->Username   = getenv('MAIL_USER') ?: '';
+            $mail->Password   = getenv('MAIL_PASS') ?: '';
+            $mail->SMTPSecure = !empty(getenv('MAIL_USER')) ? PHPMailer::ENCRYPTION_STARTTLS : '';
 
-            $mail->setFrom('from@example.com', 'Mailer');
+            $mail->setFrom(getenv('MAIL_FROM'), 'Roarr');
             $mail->addAddress($email);
 
             $mail->isHTML(true);
