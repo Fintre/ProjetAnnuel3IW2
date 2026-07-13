@@ -15,7 +15,7 @@ class EmailVerificationRepository extends Base
             'user_id'    => $email->getUserID(),
             'token'      => $email->getToken(),
             'created_at' => date('Y-m-d'),
-        ]);
+        ], 'user_id');
     }
 
     public function findUserIdByToken(string $token): ?int{

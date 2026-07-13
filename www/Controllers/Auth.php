@@ -65,18 +65,18 @@ class Auth extends Base
                         $this->renderPage("userProfil");
                     } else {
                         $this->errors[]="Votre compte n'est pas encore activé";
-                        $this->renderPage("login", "headerFooter", ["errors" => $this->errors]);
+                        $this->renderPage("login", "noHeader", ["errors" => $this->errors]);
                     } 
                 } else {
                         $this->errors[]="Mot de passe incorrect";
-                        $this->renderPage("login", "headerFooter", ["errors" => $this->errors]);
+                        $this->renderPage("login", "noHeader", ["errors" => $this->errors]);
                     }
             } else {
-                $this->renderPage("login", "headerFooter", ["errors" => $this->errors]);
+                $this->renderPage("login", "noHeader", ["errors" => $this->errors]);
             }  
         } else {
             echo "Tentative de XSS";
-            $this->renderPage("login");
+            $this->renderPage("login", "noHeader");
         }
     }
 
@@ -132,15 +132,18 @@ class Auth extends Base
                 $this->emailRepository->create($emailVerification);
 
                 $emailController = new EmailVerification();
-                $emailController->sendVerificationMail($email, $token, "Veuillez activer votre compte", 'activation');
+                $sent = $emailController->sendVerificationMail($email, $token, "Veuillez activer votre compte", 'activation');
+                if($sent){
+                    $_SESSION['flash'] = 'Un mail de confirmation vient de vous être envoyé pour activer votre compte';
+                }
             }
             $this->renderPage("home", "headerFooter");
         } else {
-            $this->renderPage("signup", "headerFooter", ["errors" => $this->errors]);
+            $this->renderPage("signup", "noHeader", ["errors" => $this->errors]);
         }
         }else{
             echo "Tentative de XSS";
-            $this->renderPage("signup");
+            $this->renderPage("signup", "noHeader");
         }
     }
 
@@ -244,14 +247,14 @@ class Auth extends Base
     }
 
     public function renderResetPassword(): void{
-        $this->renderPage("resetPassword");
+        $this->renderPage("resetPassword", "noHeader");
     }
 
     public function renderModifyPassword(): void {
         $emailService = new EmailVerification();
         $token = isset($_GET["token"]) ? $_GET["token"] : null;
         $isActiveToken = $emailService->verifyIfTokenExist($token);
-        if($isActiveToken){ $this->renderPage("modifyPassword", "headerFooter"); }
+        if($isActiveToken){ $this->renderPage("modifyPassword", "noHeader"); }
     }
 
     public function updatePassword(): void {
@@ -271,15 +274,15 @@ class Auth extends Base
                 if(!empty($userId)){
                     $this->userRepository->updateColumn(['password' => $pwdHashed], $userId);
                     $_SESSION['error'] = "Votre mot de passe à été modifié";
-                    $this->renderPage("login");
+                    $this->renderPage("login", "noHeader");
                 }
             } else {
                 $_SESSION['error'] = "Mdp invalid";
-                $this->renderPage("modifyPassword", "headerFooter", ["errors" => $this->errors]);
+                $this->renderPage("modifyPassword", "noHeader", ["errors" => $this->errors]);
             }
         } else {
             echo "Tentative de XSS";
-            $this->renderPage("signup");
+            $this->renderPage("signup", "noHeader");
         }
     }
 

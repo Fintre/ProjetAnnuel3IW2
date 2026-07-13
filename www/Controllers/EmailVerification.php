@@ -31,28 +31,31 @@ class EmailVerification extends Base
     }
 
     public function sendVerificationMail($email, $token, $subject, $path){
-        $activationLink = "http://localhost:1001/".$path."?email=".$email."&token=".$token;
+        $activationLink = getenv('APP_URL') . "/" . $path . "?email=" . $email . "&token=" . $token;
         $mail = new PHPMailer(true);
-            try {
-                $mail->SMTPDebug = 0;
-                $mail->isSMTP();
-                $mail->Host       = 'mailpit';
-                $mail->SMTPAuth   = false;
-                $mail->Port       = 1025;
+        try {
+            $mail->SMTPDebug = 0;
+            $mail->isSMTP();
+            $mail->Host       = getenv('MAIL_HOST');
+            $mail->Port       = (int) getenv('MAIL_PORT');
+            $mail->SMTPAuth   = !empty(getenv('MAIL_USER'));
+            $mail->Username   = getenv('MAIL_USER') ?: '';
+            $mail->Password   = getenv('MAIL_PASS') ?: '';
+            $mail->SMTPSecure = !empty(getenv('MAIL_USER')) ? PHPMailer::ENCRYPTION_STARTTLS : '';
 
-                $mail->setFrom('from@example.com', 'Mailer');
-                $mail->addAddress($email);
+            $mail->setFrom(getenv('MAIL_FROM'), 'Roarr');
+            $mail->addAddress($email);
 
-                $mail->isHTML(true);
-                $mail->Subject = $subject;
-                $mail->Body    = 'Cliquez sur ce lien : <a href="'.$activationLink.'">ici!</a>';
-                $mail->AltBody = $activationLink;
+            $mail->isHTML(true);
+            $mail->Subject = $subject;
+            $mail->Body    = 'Cliquez sur ce lien : <a href="'.$activationLink.'">ici!</a>';
+            $mail->AltBody = $activationLink;
 
-                $mail->send();
-                echo 'Un mail de confirmation vient de vous être envoyé';
-            } catch (Exception $e) {
-                echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-            }
+            $mail->send();
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
     public function sendResetPwdMail(){
@@ -68,7 +71,12 @@ class EmailVerification extends Base
             } else {
                 $token = hash("sha256", bin2hex(random_bytes(32)));
                 $this->emailRepository->updateToken($userId, $token);
-                $this->sendVerificationMail($email, $token, "Veuillez modifier votre mot de passe", 'modifyPassword');
+                $sent = $this->sendVerificationMail($email, $token, "Veuillez modifier votre mot de passe", 'modifyPassword');
+                if($sent){
+                    $_SESSION['flash'] = 'Un mail de confirmation vient de vous être envoyé';
+                }
+                header('Location: /');
+                exit;
             }
         } else{
             $this->errors[]= "L'email n'existe pas en bdd";

@@ -48,4 +48,12 @@ class BankAccountRepository  extends Base
     {
         return $this->dbDelete($this->table, $id);
     }
+
+
+    public function adjustSolde(int $accountId, float $delta): bool
+{
+    $sql = "UPDATE {$this->table} SET solde = solde + :delta WHERE id = :id";
+    $stmt = $this->db->getConnection()->prepare($sql);
+    return $stmt->execute([':delta' => $delta, ':id' => $accountId]);
+}
 }

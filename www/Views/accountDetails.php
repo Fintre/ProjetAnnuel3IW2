@@ -140,9 +140,9 @@ $sep     = $accountId ? '&' : '';
                     <div class="acdetail-group-label"><?= formatDateLabel($date, $frDays, $frMonths) ?></div>
                     <?php foreach ($rows as $t): ?>
                         <div class="acdetail-row">
-                            <span class="acdetail-row-date"><?= (int)date('j', strtotime($t['date'])) ?> <?= strtolower(substr($frMonths[(int)date('n', strtotime($t['date']))], 0, 4)) ?></span>
-                            <span class="acdetail-row-libelle"><?= htmlspecialchars($t['label']) ?></span>
-                            <span class="acdetail-row-cat">
+                            <span class="acdetail-row-date"><?= (int)date('j', strtotime($t['start_date'])) ?> ...</span>
+                            <span class="acdetail-row-libelle"><?= htmlspecialchars($t['short_name']) ?></span>
+                                <span class="acdetail-row-cat">
                                 <span class="acdetail-badge <?= categoryClass($t['category']) ?>"><?= htmlspecialchars($t['category']) ?></span>
                             </span>
                             <span class="acdetail-row-amount <?= $t['amount'] >= 0 ? 'acdetail-row-amount--pos' : 'acdetail-row-amount--neg' ?>">
@@ -155,6 +155,291 @@ $sep     = $accountId ? '&' : '';
         <?php endif; ?>
     </section>
 
+
+
+
+
+
+<section class="proj screen-size">
+ 
+    <div class="proj-head">
+        <span class="proj-tag">PROJECTION</span>
+        <h2 class="proj-title">Simulation.</h2>
+        <p class="proj-desc">Estimez l'état de ce compte à une date future en tenant compte des transactions récurrentes, des intérêts annuels (<?= number_format($account['annual_interest_rate'] ?? 0, 2) ?>%) et du taux d'imposition (<?= number_format($account['tax_rate'] ?? 0, 2) ?>%).</p>
+    </div>
+ 
+    <div class="proj-controls">
+        <div class="proj-control-group">
+            <label class="proj-label" for="proj-date">DATE CIBLE</label>
+            <input type="date" id="proj-date" class="proj-date-input"
+                   min="<?= date('Y-m-d', strtotime('+1 month')) ?>"
+                   value="<?= date('Y-m-d', strtotime('+12 months')) ?>">
+            <span class="proj-date-hint" id="proj-date-hint"></span>
+        </div>
+    </div>
+ 
+    <div class="proj-sim">
+        <div class="proj-sim-head">
+            <span class="proj-sim-label">TRANSACTIONS SIMULÉES <span class="proj-sim-hint">(non sauvegardées)</span></span>
+            <button type="button" class="proj-sim-add" onclick="projAddRow()">+ Ajouter</button>
+        </div>
+        <div id="proj-sim-rows" class="proj-sim-rows-wrap"></div>
+    </div>
+ 
+    <div class="proj-results">
+        <div class="proj-result-card proj-result-card--main">
+            <p class="proj-result-label">SOLDE ESTIMÉ</p>
+            <p class="proj-result-value" id="proj-final-solde">—</p>
+            <p class="proj-result-sub" id="proj-months-count"></p>
+        </div>
+        <div class="proj-result-card">
+            <p class="proj-result-label">INTÉRÊTS NETS CUMULÉS</p>
+            <p class="proj-result-value proj-result-value--pos" id="proj-interests">—</p>
+            <p class="proj-result-sub">Après impôt (<?= number_format($account['tax_rate'] ?? 0, 2) ?>%)</p>
+        </div>
+        <div class="proj-result-card">
+            <p class="proj-result-label">FLUX RÉCURRENTS CUMULÉS</p>
+            <p class="proj-result-value" id="proj-recurring">—</p>
+            <p class="proj-result-sub">Entrées − Sorties récurrentes</p>
+        </div>
+        <div class="proj-result-card">
+            <p class="proj-result-label">REVENUS CUMULÉS</p>
+            <p class="proj-result-value proj-result-value--pos" id="proj-total-income">—</p>
+            <p class="proj-result-sub">Toutes entrées récurrentes</p>
+        </div>
+        <div class="proj-result-card">
+            <p class="proj-result-label">DÉPENSES CUMULÉES</p>
+            <p class="proj-result-value proj-result-value--neg" id="proj-total-expense">—</p>
+            <p class="proj-result-sub">Toutes sorties récurrentes</p>
+        </div>
+    </div>
+ 
+    <div class="proj-chart-wrap">
+        <canvas id="proj-chart"></canvas>
+    </div>
+ 
+</section>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+ 
+<script>
+const SOLDE_INITIAL = <?= json_encode((float)($account['solde'] ?? 0)) ?>;
+const TAUX_INTERET  = <?= json_encode((float)($account['annual_interest_rate'] ?? 0)) ?>;
+const TAUX_IMPOT    = <?= json_encode((float)($account['tax_rate'] ?? 0)) ?>;
+const TRANSACTIONS  = <?= json_encode(array_values(array_filter($allTransactions ?? [], fn($t) => $t['frequency'] === 'RECURRING'))) ?>;
+ 
+const dateEl = document.getElementById('proj-date');
+const dateHint = document.getElementById('proj-date-hint');
+ 
+function monthsBetween(from, to) {
+    return (to.getFullYear() - from.getFullYear()) * 12 + (to.getMonth() - from.getMonth());
+}
+ 
+function updateHint(months) {
+    const y = Math.floor(months / 12);
+    const m = months % 12;
+    let parts = [];
+    if (y > 0) parts.push(y + ' an' + (y > 1 ? 's' : ''));
+    if (m > 0) parts.push(m + ' mois');
+    dateHint.textContent = parts.length ? '→ ' + parts.join(' et ') : '';
+}
+ 
+dateEl.addEventListener('change', runProjection);
+ 
+let simRows = [];
+let simRowId = 0;
+ 
+function projAddRow() {
+    const id = ++simRowId;
+    simRows.push({ id, label: '', type: 'expense', amount: 0, interval: 1 });
+ 
+    const container = document.getElementById('proj-sim-rows');
+    const div = document.createElement('div');
+    div.className = 'proj-sim-row';
+    div.id = 'sim-row-' + id;
+    div.innerHTML = `
+        <input class="proj-sim-input" type="text" placeholder="Libellé (ex : Loyer)" oninput="simUpdate(${id},'label',this.value)">
+        <select class="proj-sim-select" onchange="simUpdate(${id},'type',this.value)">
+            <option value="expense">SORTIE</option>
+            <option value="income">ENTRÉE</option>
+        </select>
+        <input class="proj-sim-input" type="number" placeholder="Montant €" min="0" step="0.01" oninput="simUpdate(${id},'amount',parseFloat(this.value)||0)">
+        <div style="display:flex;align-items:center;gap:0.3rem">
+            <span style="font-size:0.7rem;opacity:0.5;white-space:nowrap">/ </span>
+            <input class="proj-sim-input" type="number" placeholder="1" min="1" step="1" value="1" oninput="simUpdate(${id},'interval',parseInt(this.value)||1)" style="width:50px">
+            <span style="font-size:0.7rem;opacity:0.5;white-space:nowrap">mois</span>
+        </div>
+        <button class="proj-sim-remove" onclick="projRemoveRow(${id})" title="Supprimer">✕</button>
+    `;
+    container.appendChild(div);
+    runProjection();
+}
+ 
+function simUpdate(id, key, value) {
+    const row = simRows.find(r => r.id === id);
+    if (row) { row[key] = value; runProjection(); }
+}
+ 
+function projRemoveRow(id) {
+    simRows = simRows.filter(r => r.id !== id);
+    const el = document.getElementById('sim-row-' + id);
+    if (el) el.remove();
+    runProjection();
+}
+ 
+function runProjection() {
+    const today    = new Date();
+    today.setDate(1); 
+ 
+    const target = dateEl.value ? new Date(dateEl.value) : null;
+    if (!target || isNaN(target)) return;
+ 
+    const months = monthsBetween(today, target);
+    if (months <= 0) return;
+ 
+    updateHint(months);
+ 
+    const tauxMensuel    = (TAUX_INTERET / 100) / 12;
+    const tauxImpotFrac  = TAUX_IMPOT / 100;
+ 
+    let solde           = SOLDE_INITIAL;
+    let totalInterests  = 0;
+    let totalRecurring  = 0;
+    let totalIncome     = 0;
+    let totalExpense    = 0;
+    const history = [{ label: 'Aujourd\'hui', solde: solde }];
+ 
+    for (let m = 1; m <= months; m++) {
+        const simDate = new Date(today.getFullYear(), today.getMonth() + m, 1);
+ 
+        for (const t of TRANSACTIONS) {
+            const start = new Date(t.start_date);
+            const end   = t.end_date ? new Date(t.end_date) : null;
+            if (simDate < start) continue;
+            if (end && simDate > end) continue;
+ 
+            const interval   = parseInt(t.interval_months) || 1;
+            const diffMonths = (simDate.getFullYear() - start.getFullYear()) * 12 + (simDate.getMonth() - start.getMonth());
+            if (diffMonths % interval !== 0) continue;
+ 
+            const delta = t.type === 'income' ? parseFloat(t.amount) : -parseFloat(t.amount);
+            solde += delta;
+            totalRecurring += delta;
+            if (t.type === 'income') totalIncome  += parseFloat(t.amount);
+            else                     totalExpense += parseFloat(t.amount);
+        }
+ 
+        for (const r of simRows) {
+            if (!r.amount || r.amount <= 0) continue;
+            const interval = r.interval || 1;
+            if ((m - 1) % interval !== 0) continue;
+            const delta = r.type === 'income' ? r.amount : -r.amount;
+            solde += delta;
+            totalRecurring += delta;
+            if (r.type === 'income') totalIncome  += r.amount;
+            else                     totalExpense += r.amount;
+        }
+ 
+        if (solde > 0 && tauxMensuel > 0) {
+            const interetsBruts = solde * tauxMensuel;
+            const interetsNets  = interetsBruts * (1 - tauxImpotFrac);
+            solde += interetsNets;
+            totalInterests += interetsNets;
+        }
+ 
+        const monthNames = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+        const label = (months <= 24 || m % 6 === 0 || m === months)
+            ? monthNames[simDate.getMonth()] + ' ' + simDate.getFullYear()
+            : '';
+        history.push({ label, solde: Math.round(solde * 100) / 100 });
+    }
+ 
+    const fmt = v => (v >= 0 ? '+ ' : '− ') + Math.abs(v).toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' €';
+    const fmtSolde = v => v.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' €';
+ 
+    document.getElementById('proj-final-solde').textContent   = fmtSolde(solde);
+    document.getElementById('proj-interests').textContent     = fmt(totalInterests);
+    document.getElementById('proj-recurring').textContent     = fmt(totalRecurring);
+    document.getElementById('proj-months-count').textContent  = 'Dans ' + months + ' mois';
+    document.getElementById('proj-total-income').textContent  = '+ ' + totalIncome.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' €';
+    document.getElementById('proj-total-expense').textContent = '− ' + totalExpense.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' €';
+ 
+    updateChart(history);
+}
+ 
+let chartInstance = null;
+ 
+function updateChart(history) {
+    const labels = history.map(h => h.label);
+    const data   = history.map(h => h.solde);
+ 
+    if (chartInstance) {
+        chartInstance.data.labels = labels;
+        chartInstance.data.datasets[0].data = data;
+        chartInstance.update('none');
+        return;
+    }
+ 
+    const ctx = document.getElementById('proj-chart').getContext('2d');
+    chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [{
+                label: 'Solde estimé',
+                data,
+                borderColor: '#1a3a2a',
+                backgroundColor: 'rgba(26,58,42,0.07)',
+                borderWidth: 2,
+                pointRadius: history.length > 60 ? 0 : 3,
+                pointBackgroundColor: '#1a3a2a',
+                fill: true,
+                tension: 0.35,
+            }]
+        },
+        options: {
+            responsive: true,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ctx.parsed.y.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' €',
+                        title: ctx => ctx[0].label || ''
+                    },
+                    filter: item => item.label !== ''
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        maxTicksLimit: 12,
+                        font: { size: 11 },
+                        callback: function(val, idx) {
+                            return this.getLabelForValue(val) || null;
+                        }
+                    },
+                    grid: { display: false }
+                },
+                y: {
+                    ticks: {
+                        callback: v => v.toLocaleString('fr-FR') + ' €',
+                        font: { size: 11 }
+                    },
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                }
+            }
+        }
+    });
+}
+ 
+runProjection();
+</script>
+
+
+
+
+
+
 </main>
 
 <div class="acdetail-modal" id="modal-add-transaction">
@@ -163,7 +448,7 @@ $sep     = $accountId ? '&' : '';
 
         <div class="acdetail-modal-head">
             <div class="acdetail-modal-head-left">
-                <span class="acdetail-modal-tag">§ NOUVELLE TRANSACTION</span>
+                <span class="acdetail-modal-tag">NOUVELLE TRANSACTION</span>
                 <h2 class="acdetail-modal-title">Ajouter.</h2>
             </div>
             <button type="button" class="acdetail-modal-close" onclick="document.getElementById('modal-add-transaction').classList.remove('acdetail-modal--open')">
@@ -171,12 +456,10 @@ $sep     = $accountId ? '&' : '';
             </button>
         </div>
 
-        <form method="POST" action="/createTransaction" class="acdetail-modal-form">
-            <?php if ($accountId): ?>
+            <form method="POST" action="/transactions/create" class="acdetail-modal-form">            <?php if ($accountId): ?>
                 <input type="hidden" name="account_id" value="<?= (int)$accountId ?>">
             <?php endif; ?>
 
-            <!-- TYPE : ENTRÉE / SORTIE -->
             <div class="manage-field">
                 <div class="manage-field-head">
                     <label class="manage-field-label">TYPE *</label>
@@ -193,7 +476,6 @@ $sep     = $accountId ? '&' : '';
                 </div>
             </div>
 
-            <!-- LIBELLÉ -->
             <div class="manage-field">
                 <div class="manage-field-head">
                     <label for="tx-label" class="manage-field-label">LIBELLÉ *</label>
@@ -202,7 +484,6 @@ $sep     = $accountId ? '&' : '';
                 <input id="tx-label" class="manage-field-input" type="text" name="short_name" required placeholder="Intitulé de la transaction">
             </div>
 
-            <!-- CATÉGORIE -->
             <div class="manage-field">
                 <div class="manage-field-head">
                     <label for="tx-category" class="manage-field-label">CATÉGORIE</label>
@@ -219,7 +500,6 @@ $sep     = $accountId ? '&' : '';
                 </datalist>
             </div>
 
-            <!-- MONTANT -->
             <div class="manage-field">
                 <div class="manage-field-head">
                     <label for="tx-amount" class="manage-field-label">MONTANT *</label>
@@ -231,7 +511,6 @@ $sep     = $accountId ? '&' : '';
                 </div>
             </div>
 
-            <!-- FRÉQUENCE : PONCTUELLE / RÉCURRENTE -->
             <div class="manage-field">
                 <div class="manage-field-head">
                     <label class="manage-field-label">FRÉQUENCE *</label>
@@ -248,7 +527,6 @@ $sep     = $accountId ? '&' : '';
                 </div>
             </div>
 
-            <!-- CHAMPS PONCTUELLE -->
             <div id="tx-fields-onetime">
                 <div class="manage-field">
                     <div class="manage-field-head">
@@ -258,14 +536,13 @@ $sep     = $accountId ? '&' : '';
                 </div>
             </div>
 
-            <!-- CHAMPS RÉCURRENTE -->
             <div id="tx-fields-recurring" class="acdetail-modal-hidden">
                 <div class="acdetail-modal-recurring-grid">
                     <div class="manage-field">
                         <div class="manage-field-head">
                             <label for="tx-start" class="manage-field-label">DATE DE DÉBUT *</label>
                         </div>
-                        <input id="tx-start" class="manage-field-input" type="date" name="start_date_r" value="<?= date('Y-m-d') ?>">
+                        <input id="tx-start" class="manage-field-input" type="date" name="start_date" value="<?= date('Y-m-d') ?>">
                     </div>
                     <div class="manage-field">
                         <div class="manage-field-head">
@@ -287,7 +564,6 @@ $sep     = $accountId ? '&' : '';
                 </div>
             </div>
 
-            <!-- DESCRIPTION -->
             <div class="manage-field">
                 <div class="manage-field-head">
                     <label for="tx-desc" class="manage-field-label">DESCRIPTION</label>

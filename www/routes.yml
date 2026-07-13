@@ -110,12 +110,14 @@
 /formBankAccount:
   controller: BankAccount
   action: formCreate
+  method: GET
   access: auth
 
 /accounts:
   controller: BankAccount
   action: renderAccounts
   method: GET
+  access: auth
 
 /manageAccounts:
   controller: BankAccount
@@ -157,4 +159,47 @@
   controller: Subscription
   action: unsubscribe
   method: POST
+  access: auth
+
+# Transactions
+/transactions:
+  controller: Transaction
+  action: index
+  method: GET
+  access: auth
+
+/transactions/create:
+  controller: Transaction
+  action: create
+  method: POST
+  access: auth
+
+/transactions/form:
+  controller: Transaction
+  action: formCreate
+  method: GET
+  access: auth
+
+/transactions/edit:
+  controller: Transaction
+  action: edit
+  method: GET
+  access: auth
+
+/transactions/update:
+  controller: Transaction
+  action: edit
+  method: POST
+  access: auth
+
+/transactions/delete:
+  controller: Transaction
+  action: delete
+  method: POST
+  access: auth
+
+/transactions/summary:
+  controller: Transaction
+  action: summary
+  method: GET
   access: auth

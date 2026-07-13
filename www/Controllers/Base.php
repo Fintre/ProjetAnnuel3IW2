@@ -65,25 +65,27 @@ abstract class Base
         return null;
     }
 
-    protected function dbInsert(string $table, array $data): string|false
-        {
-            $columns = implode(', ', array_keys($data));
-            $placeholders = implode(', ', array_map(fn($k) => ":$k", array_keys($data)));
+    protected function dbInsert(string $table, array $data, string $returning = 'id'): string|false
+{
+    $columns = implode(', ', array_keys($data));
+    $placeholders = implode(', ', array_map(fn($k) => ":$k", array_keys($data)));
 
-            $sql = "INSERT INTO {$table} ({$columns}) VALUES ({$placeholders})";
+    $sql = "INSERT INTO {$table} ({$columns}) VALUES ({$placeholders}) RETURNING {$returning}";
 
-            $stmt = $this->db->getConnection()->prepare($sql);
+    $stmt = $this->db->getConnection()->prepare($sql);
 
-            foreach ($data as $key => $value) {
-                $stmt->bindValue(":$key", $value);
-            }
+    foreach ($data as $key => $value) {
+        $stmt->bindValue(":$key", $value);
+    }
 
-            if ($stmt->execute()) {
-                return $this->db->getConnection()->lastInsertId();
-            }
+    if ($stmt->execute()) {
+        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $row[$returning] ?? false;
+    }
 
-            return false;
-        }
+    return false;
+}
+
 
     protected function dbFindAll(string $table): array
     {

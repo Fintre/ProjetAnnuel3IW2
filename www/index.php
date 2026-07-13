@@ -70,7 +70,7 @@ if (!file_exists("Controllers/".$controller.".php")) {
     die("Erreur, le fichier du controller n'existe pas");
 }
 
-include "Controllers/".$controller.".php";
+include_once "Controllers/".$controller.".php";
 
 $controller = "App\\Controller\\".$controller;
 if (!class_exists($controller)) {
