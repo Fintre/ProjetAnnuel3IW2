@@ -2101,8 +2101,10 @@ header {
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
-  color: #faf6ec;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  color: var(--cream);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .accounts-card:hover {
@@ -2133,6 +2135,275 @@ header {
   letter-spacing: 0.18em;
   color: #faf6ec;
   opacity: 0.7;
+}
+
+.accounts-card {
+  background-color: var(--forest);
+  border: 1px solid var(--forest);
+  border-radius: 0.85rem;
+  padding: 1.5rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  color: var(--cream);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  position: relative;
+  text-decoration: none;
+}
+
+.accounts-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(26, 26, 23, 0.08);
+}
+
+.accounts-card-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  color: var(--cream);
+  text-decoration: none;
+  flex-grow: 1;
+}
+
+.accounts-card-bank {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: var(--weight-title);
+  font-size: 1.4rem;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.accounts-card-solde {
+  font-family: var(--display);
+  font-size: 2.25rem;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  padding-top: 0.5rem;
+}
+
+.accounts-card-type {
+  font-family: var(--mono);
+  font-size: var(--text-size-s);
+  letter-spacing: 0.18em;
+  color: var(--cream);
+  opacity: 0.7;
+}
+
+.accounts-card-actions {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+}
+
+.action-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.15);
+  color: var(--cream);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+  text-decoration: none;
+}
+
+.action-badge:hover {
+  background-color: var(--amber);
+  color: var(--ink);
+}
+
+.action-badge svg {
+  width: 1rem;
+  height: 1rem;
+  stroke-width: 2;
+}
+
+.delete-badge:hover {
+  background-color: var(--plum);
+  color: var(--cream);
+}
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(26, 26, 23, 0.7);
+  backdrop-filter: blur(5px);
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-color: var(--cream);
+  margin: auto;
+  padding: 2rem;
+  border-radius: 0.85rem;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 0.5rem 2rem rgba(26, 26, 23, 0.2);
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.modal-title {
+  font-family: var(--display);
+  font-size: 1.8rem;
+  color: var(--ink);
+  margin: 0;
+}
+
+.close-modal {
+  color: var(--ink);
+  font-size: 2rem;
+  font-weight: bold;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+  color: var(--amber);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-body {
+  margin-bottom: 1.5rem;
+}
+
+.modal-body p {
+  font-family: var(--sans);
+  font-size: var(--text-size-m);
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+
+.txt-warning {
+  color: var(--plum);
+  font-weight: bold;
+}
+
+.modal-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.modal-form label {
+  display: block;
+  font-family: var(--sans);
+  font-size: var(--text-size-s);
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.modal-form input[type="text"] {
+  width: calc(100% - 1.5rem);
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  font-family: var(--sans);
+  font-size: var(--text-size-m);
+  color: var(--ink);
+  background-color: var(--white-soft);
+}
+
+.modal-form input[type="text"]:focus {
+  outline: none;
+  border-color: var(--forest);
+  box-shadow: 0 0 0 2px rgba(5, 72, 47, 0.2);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line-2);
+}
+
+.btn-secondary {
+  background-color: var(--ivory-2);
+  color: var(--ink-2);
+  border: 1px solid var(--line);
+  padding: 0.75rem 1.5rem;
+  border-radius: 60rem;
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: var(--text-size-btn);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background-color: var(--line);
+}
+
+.btn-primary {
+  background-color: var(--forest);
+  color: var(--cream);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 60rem;
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: var(--text-size-btn);
+  transition: background-color 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--forest-deep);
+}
+
+.btn-danger {
+  background-color: var(--plum);
+  color: var(--cream);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 60rem;
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: var(--text-size-btn);
+  transition: background-color 0.2s ease;
+}
+
+.btn-danger:hover {
+  background-color: #3a1c2d; /* Une version plus foncée de plum */
 }
 
 .manage {
@@ -2527,7 +2798,10 @@ header {
   font-size: var(--text-size-s);
   letter-spacing: 0.18em;
   color: var(--ink);
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .acdetail-modal-toggle-btn input[type="radio"] {
@@ -2759,7 +3033,9 @@ header {
   color: var(--ink);
   padding: 0.4rem 1rem;
   border-radius: 60rem;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .acdetail-filters-btn:hover {

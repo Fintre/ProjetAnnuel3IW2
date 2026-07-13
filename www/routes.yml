@@ -131,6 +131,18 @@
   method: GET
   access: auth
 
+/accountDelete:
+  controller: BankAccount
+  action: accountDelete
+  method: POST
+  access: auth
+
+/accountEdit:
+  controller: BankAccount
+  action: accountEdit
+  method: POST
+  access: auth
+
 /subscribe:
   controller: Subscription
   action: subscribe
