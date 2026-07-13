@@ -49,6 +49,10 @@ class BankAccount extends Base
         header("Location: /formBankAccount");
         exit;
     }
+    public function formCreate(): void{
+        $this->renderPage("formCreateAccount");
+    }
+    
     public function index(): void
     {
         $this->isAuth();
