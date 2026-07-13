@@ -18,6 +18,12 @@
         </div>
 
         <form method="POST" action="/createBankAccount" class="manage-form">
+        <?php if (!empty($_SESSION['error_message'])): ?>
+        <div class="manage-error">
+            <?= htmlspecialchars($_SESSION['error_message']) ?>
+        </div>
+            <?php unset($_SESSION['error_message']); ?>
+        <?php endif; ?>
             <div class="manage-field">
                 <div class="manage-field-head">
                     <label for="short_name" class="manage-field-label">NOM DE LA BANQUE *</label>
