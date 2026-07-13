@@ -1,6 +1,6 @@
 <main class="accounts">
     <section class="accounts-head screen-size">
-        <span class="accounts-head-tag">BONJOUR <?= strtoupper($_SESSION["name"] ?? "") ?></span>
+        <span class="accounts-head-tag">BONJOUR <?= htmlspecialchars(strtoupper($_SESSION["name"] ?? "")) ?></span>
         <div class="accounts-head-row">
             <h1 class="accounts-head-title">Mes comptes</h1>
             <?php if (!empty($accounts)): ?>
@@ -32,9 +32,9 @@
                 <?php foreach($accounts as $account): ?>
                     <div class="accounts-card" data-account-id="<?= $account['id'] ?>">
                         <a href="/accountDetails?id=<?= $account['id'] ?>" class="accounts-card-link">
-                            <h3 class="accounts-card-bank"><?= $account['short_name'] ?></h3>
+                            <h3 class="accounts-card-bank"><?= htmlspecialchars($account['short_name']) ?></h3>
                             <p class="accounts-card-solde">€<?= number_format($account['solde'], 2, ',', ' ') ?></p>
-                            <p class="accounts-card-type"><?= $account['description'] ?></p>
+                            <p class="accounts-card-type"><?= htmlspecialchars($account['description']) ?></p>
                         </a>
 
                         <div class="accounts-card-actions">
