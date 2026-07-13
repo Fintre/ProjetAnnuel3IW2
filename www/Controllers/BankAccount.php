@@ -49,9 +49,6 @@ class BankAccount extends Base
         header("Location: /manageAccounts");
         exit;
     }
-    public function formCreate(): void{
-        $this->renderPage("formCreateAccount");
-    }
 
     public function index(): void
     {
@@ -60,56 +57,6 @@ class BankAccount extends Base
         $accounts = $this->repository->findByUser($this->getCurrentUserId());
 
         $this->renderPage("accounts", "headerFooter", ['accounts' => $accounts]);
-    }
-
-    public function show(int $id): void
-    {
-        $this->isAuth();
-
-        $account = $this->repository->findById($id);
-
-        if (!$account) {
-            return;
-        }
-
-        $this->renderPage("account", "headerFooter", ['account' => $account]);
-    }
-
-    public function update(int $id): void
-    {
-        $this->isAuth();
-
-        if (
-            !empty($_POST["short_name"]) &&
-            !empty($_POST["annual_interest_rate"]) &&
-            !empty($_POST["tax_rate"]) &&
-            !empty($_POST["solde"])
-        ) {
-            $account = new Account();
-            $account->setId($id);
-            $account->setShortName($_POST['short_name']);
-            $account->setDescription($_POST['description'] ?? '');
-            $account->setAnnualInterestRate((float) $_POST['annual_interest_rate']);
-            $account->setTaxRate((float) $_POST['tax_rate']);
-            $account->setSolde((float) $_POST['solde']);
-
-            $success = $this->repository->update($account);
-
-            if ($success) {
-                // Redirection
-            }
-        }
-    }
-
-    public function destroy(int $id): void
-    {
-        $this->isAuth();
-
-        $success = $this->repository->destroy($id);
-
-        if ($success) {
-            // Redirection
-        }
     }
 
     public function renderAccounts(): void{
