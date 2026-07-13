@@ -29,33 +29,14 @@
     <?php else: ?>
         <section class="accounts-list screen-size">
             <div class="accounts-list-cards">
-    <?php foreach($accounts as $account): ?>
-        <a href="/accountDetails?id=<?= $account['id'] ?>" class="accounts-card">
-            <div class="accounts-card-content">
-                <h3 class="accounts-card-bank"><?= $account['short_name'] ?></h3>
-                <p class="accounts-card-solde">€<?= number_format($account['solde'], 2, ',', ' ') ?></p>
-                <p class="accounts-card-type"><?= $account['description'] ?></p>
-            </div>
-        </a>
-    <?php endforeach; ?>
-</div>
-        </section>
-
-        <section class="accounts-list screen-size">
-            <div class="accounts-list-head">
-                <h2 class="accounts-list-title">Vue d'ensemble</h2>
-            </div>
-<div class="accounts-list-cards">
                 <?php foreach($accounts as $account): ?>
                     <div class="accounts-card" data-account-id="<?= $account['id'] ?>">
-                        <!-- Lien principal vers les détails -->
                         <a href="/accountDetails?id=<?= $account['id'] ?>" class="accounts-card-link">
                             <h3 class="accounts-card-bank"><?= $account['short_name'] ?></h3>
                             <p class="accounts-card-solde">€<?= number_format($account['solde'], 2, ',', ' ') ?></p>
                             <p class="accounts-card-type"><?= $account['description'] ?></p>
                         </a>
 
-                        <!-- Groupe d'actions (badges) -->
                         <div class="accounts-card-actions">
                             <button class="action-badge edit-badge"
                                     data-id="<?= $account['id'] ?>"
@@ -74,6 +55,14 @@
                         </div>
                     </div>
                 <?php endforeach; ?>
+</div>
+        </section>
+
+        <section class="accounts-list screen-size">
+            <div class="accounts-list-head">
+                <h2 class="accounts-list-title">Vue d'ensemble</h2>
+            </div>
+    <div class="accounts-list-cards">
             <div class="accounts-stats">
                 <div class="accounts-stats-card">
                     <p class="accounts-stats-label">PATRIMOINE TOTAL</p>
