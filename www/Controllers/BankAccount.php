@@ -16,6 +16,18 @@ class BankAccount extends Base
         $this->repository = new BankAccountRepository();
     }
 
+        private const ACCOUNT_LIMITS = [
+        'FREE' => 2,
+        'PLUS' => 5,
+        'PRO'  => PHP_INT_MAX,
+    ];
+
+    private function getAccountLimit(): int
+    {
+        $type = $_SESSION['subscription_type'] ?? 'FREE';
+        return self::ACCOUNT_LIMITS[$type] ?? self::ACCOUNT_LIMITS['FREE'];
+    }
+
     public function create(): void
     {
         $this->isAuth();
@@ -29,6 +41,15 @@ class BankAccount extends Base
             $userId = $this->getCurrentUserId();
 
             if ($userId) {
+                $currentCount = count($this->repository->findByUser($userId));
+                $limit = $this->getAccountLimit();
+
+                if ($currentCount >= $limit) {
+                    $_SESSION['error_message'] = "Vous avez atteint la limite de {$limit} compte(s) pour votre formule. Passez à une offre supérieure pour en ajouter davantage.";
+                    header("Location: /formBankAccount");
+                    exit;
+                }
+
                 $account = new Account();
                 $account->setUserId($userId);
                 $account->setShortName($_POST['short_name']);
