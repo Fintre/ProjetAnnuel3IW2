@@ -132,6 +132,7 @@ class Auth extends Base
                 $this->emailRepository->create($emailVerification);
 
                 $emailController = new EmailVerification();
+$emailController->sendVerificationMail($email, $token, "Veuillez activer votre compte", 'activation');
                 $sent = $emailController->sendVerificationMail($email, $token, "Veuillez activer votre compte", 'activation');
                 if($sent){
                     $_SESSION['flash'] = 'Un mail de confirmation vient de vous être envoyé pour activer votre compte';

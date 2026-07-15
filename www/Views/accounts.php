@@ -4,7 +4,7 @@
         <div class="accounts-head-row">
             <h1 class="accounts-head-title">Mes comptes</h1>
             <?php if (!empty($accounts)): ?>
-                <a href="/manageAccounts" class="accounts-head-cta">+ Ajouter un compte bancaire</a>
+                <a href="/formBankAccount" class="accounts-head-cta">+ Ajouter un compte bancaire</a>
             <?php endif; ?>
         </div>
     </section>
@@ -55,20 +55,21 @@
                         </div>
                     </div>
                 <?php endforeach; ?>
-</div>
+            </div>
         </section>
 
         <section class="accounts-list screen-size">
             <div class="accounts-list-head">
                 <h2 class="accounts-list-title">Vue d'ensemble</h2>
             </div>
-    <div class="accounts-list-cards">
             <div class="accounts-stats">
                 <div class="accounts-stats-card">
                     <p class="accounts-stats-label">PATRIMOINE TOTAL</p>
                     <p class="accounts-stats-value">€<?= number_format(array_sum(array_column($accounts, 'solde')), 2, ',', ' ') ?></p>
                     <p class="accounts-stats-sub">Cumul de vos comptes</p>
                 </div>
+
+                <!--
                 <div class="accounts-stats-card">
                     <p class="accounts-stats-label">REVENUS DU MOIS</p>
                     <p class="accounts-stats-value">€0</p>
@@ -84,8 +85,9 @@
                     <p class="accounts-stats-value">€0</p>
                     <p class="accounts-stats-sub">Pas encore de transactions</p>
                 </div>
+                -->
             </div>
-
+            
             <!-- MODALE D'ÉDITION -->
             <div id="editModal" class="modal-overlay">
                 <div class="modal-content">
@@ -155,7 +157,6 @@
                         <button type="submit" class="btn-danger">Supprimer définitivement</button>
                     </form>
                 </div>
-            </div>
             </div>
         </section>
     <?php endif; ?>
