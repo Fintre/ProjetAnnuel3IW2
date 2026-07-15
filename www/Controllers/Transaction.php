@@ -57,6 +57,9 @@ public function create(): void
     $transaction->setAmount((float) $_POST['amount']);
     $transaction->setStartDate($_POST['start_date']);
     $transaction->setEndDate(!empty($_POST['end_date']) ? $_POST['end_date'] : null);
+
+    error_log('POST DATA: ' . json_encode($_POST));
+
     $this->transactionRepo->store($transaction);
     $delta = $transaction->getType() === 'income' ? $transaction->getAmount() : -$transaction->getAmount();
     $this->accountRepo->adjustSolde($accountId, $delta);
@@ -74,8 +77,9 @@ public function create(): void
     public function edit(): void
     {
         $this->isAuth();
-        $id = $_GET['id'] ?? '';
-        $userId = $this->getCurrentUserId();
+$id = $_SERVER['REQUEST_METHOD'] === 'POST' 
+    ? ($_POST['id'] ?? '') 
+    : ($_GET['id'] ?? '');        $userId = $this->getCurrentUserId();
 
         $transaction = $this->transactionRepo->findById($id);
         if (!$transaction) {
@@ -103,12 +107,12 @@ public function create(): void
             $transactionObj->setEndDate(!empty($_POST['end_date']) ? $_POST['end_date'] : null);
             $this->transactionRepo->update($transactionObj);
     
-            header("Location: /transactions?account_id=" . $transaction['account_id']);
-            exit;
+$this->accountRepo->adjustSolde((int)$transaction['account_id']);
+header("Location: /accountDetails?id=" . $transaction['account_id']);
+exit;
         }
 
-        $this->renderPage('formEditTransaction', ['transaction' => $transaction]);
-    }
+$this->renderPage('formEditTransaction', 'headerFooter', ['transaction' => $transaction]);    }
 
     public function delete(): void
     {
@@ -127,11 +131,10 @@ public function create(): void
             http_response_code(403);
             exit('Accès refusé');
         }
-        $delta = $transaction['type'] === 'income' ? -(float)$transaction['amount'] : (float)$transaction['amount'];
-        $this->accountRepo->adjustSolde((int)$transaction['account_id'], $delta);
-        $this->transactionRepo->destroy($id);
-        header("Location: /transactions?account_id=" . $transaction['account_id']);
-        exit;
+$this->transactionRepo->destroy($id);
+$this->accountRepo->adjustSolde((int)$transaction['account_id']);
+header("Location: /accountDetails?id=" . $transaction['account_id']);
+exit;
     }
 
     public function summary(): void

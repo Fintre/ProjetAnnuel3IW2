@@ -20,6 +20,7 @@ class BankAccountRepository  extends Base
             'annual_interest_rate' => $account->getAnnualInterestRate(),
             'tax_rate'             => $account->getTaxRate(),
             'solde'                => $account->getSolde(),
+            'solde_initial' => $account->getSolde(),
             'registered_at'        => $account->getRegisteredAt(),
         ]);
     }
@@ -50,10 +51,19 @@ class BankAccountRepository  extends Base
     }
 
 
-    public function adjustSolde(int $accountId, float $delta): bool
+public function adjustSolde(int $accountId): bool
 {
-    $sql = "UPDATE {$this->table} SET solde = solde + :delta WHERE id = :id";
+    $sql = "
+        UPDATE account
+        SET solde = solde_initial + (
+            SELECT COALESCE(SUM(CASE WHEN t.type = 'income' THEN t.amount ELSE -t.amount END), 0)
+            FROM \"transaction\" t
+            WHERE t.account_id = :id
+            AND t.start_date <= CURRENT_DATE
+        )
+        WHERE id = :id2
+    ";
     $stmt = $this->db->getConnection()->prepare($sql);
-    return $stmt->execute([':delta' => $delta, ':id' => $accountId]);
+    return $stmt->execute([':id' => $accountId, ':id2' => $accountId]);
 }
 }

@@ -106,8 +106,8 @@ class BankAccount extends Base
     }));
 
     // 6. Calcul des totaux — adapté car amount est TOUJOURS positif en BD (contrainte CHECK amount >= 0)
-    $entrées  = array_sum(array_map(fn($t) => $t['type'] === 'income'  ? (float)$t['amount'] : 0, $allTransactions));
-    $sorties  = array_sum(array_map(fn($t) => $t['type'] === 'expense' ? (float)$t['amount'] : 0, $allTransactions));
+    $entrees  = array_sum(array_map(fn($t) => $t['type'] === 'income'  && $t['start_date'] <= date('Y-m-d') ? (float)$t['amount'] : 0, $allTransactions));
+    $sorties  = array_sum(array_map(fn($t) => $t['type'] === 'expense' && $t['start_date'] <= date('Y-m-d') ? (float)$t['amount'] : 0, $allTransactions));
     $soldeNet = (float) $account['solde'];
     // 7. Liste des catégories disponibles pour le filtre déroulant
     $categories = array_unique(array_filter(array_column($allTransactions, 'category')));
@@ -125,7 +125,7 @@ class BankAccount extends Base
         'allTransactions' => $allTransactions,
         'transactions'    => $transactions,
         'grouped'         => $grouped,
-        'entrées'         => $entrées,
+        'entrees'         => $entrees,
         'sorties'         => $sorties,
         'soldeNet'        => $soldeNet,
         'categories'      => $categories,

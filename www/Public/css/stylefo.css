@@ -72,9 +72,15 @@
   height: 1.1rem;
 }
 
-.header-theme-sun { display: none; }
-[data-theme="dark"] .header-theme-sun { display: block; }
-[data-theme="dark"] .header-theme-moon { display: none; }
+.header-theme-sun {
+  display: none;
+}
+[data-theme="dark"] .header-theme-sun {
+  display: block;
+}
+[data-theme="dark"] .header-theme-moon {
+  display: none;
+}
 
 .header-actions {
   grid-column: span 3;
@@ -2017,8 +2023,9 @@ header {
 
 .accounts-stats {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1rem;
+  width: 100%;
   padding-bottom: 2.5rem;
 }
 
@@ -3924,5 +3931,34 @@ header {
   }
   .proj-title {
     font-size: 2rem;
+  }
+
+  .acdetail-row-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .acdetail-row-btn {
+    background: none;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 0.3rem;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+  }
+  .acdetail-row-btn:hover {
+    opacity: 1;
+  }
+  .acdetail-row-btn--delete:hover {
+    color: #c0392b;
+    border-color: #c0392b;
+  }
+  .acdetail-row-btn--edit:hover {
+    color: #1a3a2a;
+    border-color: #1a3a2a;
   }
 }
