@@ -112,15 +112,14 @@ abstract class Base
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-        protected function dbFindById(string $table, int $id): array|false
-    {
-        $stmt = $this->db->getConnection()->prepare(
-            "SELECT * FROM {$table} WHERE id = :id LIMIT 1"
-        );
-        $stmt->execute([':id' => $id]);
-
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
-    }
+protected function dbFindById(string $table, int|string $id): array|false
+{
+    $stmt = $this->db->getConnection()->prepare(
+        "SELECT * FROM {$table} WHERE id = :id LIMIT 1"
+    );
+    $stmt->execute([':id' => $id]);
+    return $stmt->fetch(\PDO::FETCH_ASSOC);
+}
 
     protected function dbFindByColumns(string $table, array $columns, string $orderBy = null): array {
         $this->validateColumns($columns);
@@ -153,20 +152,18 @@ abstract class Base
     }
 
 
-    protected function dbUpdate(string $table, array $data, int $id): bool
-    {
+    protected function dbUpdate(string $table, array $data, int|string $id): bool
+{
+    $fields = implode(', ', array_map(fn($k) => "{$k} = :{$k}", array_keys($data)));
 
-        $this->validateColumns(array_keys($data));
-        $fields = implode(', ', array_map(fn($k) => "{$k} = :{$k}", array_keys($data)));
+    $stmt = $this->db->getConnection()->prepare(
+        "UPDATE {$table} SET {$fields} WHERE id = :id"
+    );
 
-        $stmt = $this->db->getConnection()->prepare(
-            "UPDATE {$table} SET {$fields} WHERE id = :id"
-        );
+    $data['id'] = $id;
 
-        $data['id'] = $id;
-
-        return $stmt->execute($data);
-    }
+    return $stmt->execute($data);
+}   
 
     protected function dbUpdateBy(string $table, array $data, array $criteria): bool {
         $set = implode(', ', array_map(fn($k) => "{$k} = :set_{$k}", array_keys($data)));
@@ -183,14 +180,13 @@ abstract class Base
         return $stmt->execute();
     }
 
-    protected function dbDelete(string $table, int $id): bool
-    {
-        $stmt = $this->db->getConnection()->prepare(
-            "DELETE FROM {$table} WHERE id = :id"
-        );
-
-        return $stmt->execute([':id' => $id]);
-    }
+protected function dbDelete(string $table, int|string $id): bool
+{
+    $stmt = $this->db->getConnection()->prepare(
+        "DELETE FROM {$table} WHERE id = :id"
+    );
+    return $stmt->execute([':id' => $id]);
+}
 
     protected function validateColumns(array $columns): void {
         $invalid = array_diff($columns, $this->validColumns);
