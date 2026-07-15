@@ -1,6 +1,6 @@
 <main class="accounts">
     <section class="accounts-head screen-size">
-        <span class="accounts-head-tag">BONJOUR <?= strtoupper($_SESSION["name"] ?? "") ?></span>
+        <span class="accounts-head-tag">BONJOUR <?= htmlspecialchars(strtoupper($_SESSION["name"] ?? "")) ?></span>
         <div class="accounts-head-row">
             <h1 class="accounts-head-title">Mes comptes</h1>
             <?php if (!empty($accounts)): ?>
@@ -29,15 +29,32 @@
     <?php else: ?>
         <section class="accounts-list screen-size">
             <div class="accounts-list-cards">
-    <?php foreach($accounts as $account): ?>
-        <a href="/accountDetails?id=<?= $account['id'] ?>" class="accounts-card">
-            <div class="accounts-card-content">
-                <h3 class="accounts-card-bank"><?= $account['short_name'] ?></h3>
-                <p class="accounts-card-solde">€<?= number_format($account['solde'], 2, ',', ' ') ?></p>
-                <p class="accounts-card-type"><?= $account['description'] ?></p>
-            </div>
-        </a>
-    <?php endforeach; ?>
+                <?php foreach($accounts as $account): ?>
+                    <div class="accounts-card" data-account-id="<?= $account['id'] ?>">
+                        <a href="/accountDetails?id=<?= $account['id'] ?>" class="accounts-card-link">
+                            <h3 class="accounts-card-bank"><?= htmlspecialchars($account['short_name']) ?></h3>
+                            <p class="accounts-card-solde">€<?= number_format($account['solde'], 2, ',', ' ') ?></p>
+                            <p class="accounts-card-type"><?= htmlspecialchars($account['description']) ?></p>
+                        </a>
+
+                        <div class="accounts-card-actions">
+                            <button class="action-badge edit-badge"
+                                    data-id="<?= $account['id'] ?>"
+                                    data-name="<?= htmlspecialchars($account['short_name']) ?>"
+                                    data-desc="<?= htmlspecialchars($account['description']) ?>"
+                                    data-rate="<?= $account['annual_interest_rate'] ?>"
+                                    data-tax="<?= $account['tax_rate'] ?>"
+                                    title="Modifier">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+                            </button>
+                            <button class="action-badge delete-badge"
+                                    data-id="<?= $account['id'] ?>"
+                                    title="Supprimer">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
 </div>
         </section>
 
@@ -45,6 +62,7 @@
             <div class="accounts-list-head">
                 <h2 class="accounts-list-title">Vue d'ensemble</h2>
             </div>
+    <div class="accounts-list-cards">
             <div class="accounts-stats">
                 <div class="accounts-stats-card">
                     <p class="accounts-stats-label">PATRIMOINE TOTAL</p>
@@ -66,6 +84,78 @@
                     <p class="accounts-stats-value">€0</p>
                     <p class="accounts-stats-sub">Pas encore de transactions</p>
                 </div>
+            </div>
+
+            <!-- MODALE D'ÉDITION -->
+            <div id="editModal" class="modal-overlay">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title">Modifier le compte</h2>
+                        <button class="close-modal" onclick="closeModal('editModal')">&times;</button>
+                    </div>
+                    <form action="/accountEdit" method="POST" class="manage-form">
+                        <input type="hidden" name="id" id="edit-id">
+
+                        <div class="manage-field">
+                            <div class="manage-field-head">
+                                <label for="edit-name" class="manage-field-label">NOM DU COMPTE *</label>
+                            </div>
+                            <input type="text" name="short_name" id="edit-name" class="manage-field-input" required>
+                        </div>
+
+                        <div class="manage-field">
+                            <div class="manage-field-head">
+                                <label for="edit-desc" class="manage-field-label">DESCRIPTION / TYPE</label>
+                            </div>
+                            <input type="text" name="description" id="edit-desc" class="manage-field-input" required>
+                        </div>
+
+                        <div class="manage-field">
+                            <div class="manage-field-head">
+                                <label for="edit-annual_interest_rate" class="manage-field-label">TAUX D'INTÉRÊT ANNUEL *</label>
+                            </div>
+                            <div class="manage-field-inputWrap">
+                                <input type="number" name="annual_interest_rate" id="edit-annual_interest_rate" class="manage-field-input" step="0.01" min="0" required>
+                                <span class="manage-field-suffix">%</span>
+                            </div>
+                        </div>
+
+                        <div class="manage-field">
+                            <div class="manage-field-head">
+                                <label for="edit-tax_rate" class="manage-field-label">TAUX D'IMPOSITION *</label>
+                            </div>
+                            <div class="manage-field-inputWrap">
+                                <input type="number" name="tax_rate" id="edit-tax_rate" class="manage-field-input" step="0.01" min="0" required>
+                                <span class="manage-field-suffix">%</span>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn-secondary" onclick="closeModal('editModal')">Annuler</button>
+                            <button type="submit" class="btn-primary">Enregistrer les modifications</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- MODALE DE SUPPRESSION -->
+            <div id="deleteModal" class="modal-overlay">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title">Confirmer la suppression</h2>
+                        <button class="close-modal" onclick="closeModal('deleteModal')">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Êtes-vous sûr de vouloir supprimer le compte <strong id="delete-account-name"></strong> ?</p>
+                        <p class="txt-warning">Cette action est irréversible.</p>
+                    </div>
+                    <form action="/accountDelete" method="POST" class="modal-footer">
+                        <input type="hidden" name="id" id="delete-id">
+                        <button type="button" class="btn-secondary" onclick="closeModal('deleteModal')">Annuler</button>
+                        <button type="submit" class="btn-danger">Supprimer définitivement</button>
+                    </form>
+                </div>
+            </div>
             </div>
         </section>
     <?php endif; ?>

@@ -16,6 +16,18 @@ class BankAccount extends Base
         $this->repository = new BankAccountRepository();
     }
 
+        private const ACCOUNT_LIMITS = [
+        'FREE' => 2,
+        'PLUS' => 5,
+        'PRO'  => PHP_INT_MAX,
+    ];
+
+    private function getAccountLimit(): int
+    {
+        $type = $_SESSION['subscription_type'] ?? 'FREE';
+        return self::ACCOUNT_LIMITS[$type] ?? self::ACCOUNT_LIMITS['FREE'];
+    }
+
     public function create(): void
     {
         $this->isAuth();
@@ -29,6 +41,15 @@ class BankAccount extends Base
             $userId = $this->getCurrentUserId();
 
             if ($userId) {
+                $currentCount = count($this->repository->findByUser($userId));
+                $limit = $this->getAccountLimit();
+
+                if ($currentCount >= $limit) {
+                    $_SESSION['error_message'] = "Vous avez atteint la limite de {$limit} compte(s) pour votre formule. Passez à une offre supérieure pour en ajouter davantage.";
+                    header("Location: /formBankAccount");
+                    exit;
+                }
+
                 $account = new Account();
                 $account->setUserId($userId);
                 $account->setShortName($_POST['short_name']);
@@ -49,13 +70,10 @@ class BankAccount extends Base
         header("Location: /formBankAccount");
         exit;
     }
-
-    public function formCreate(): void
-    {
-        $this->isAuth();
-        $this->renderPage("formCreateAccount", "headerFooter");
+    public function formCreate(): void{
+        $this->renderPage("formCreateAccount");
     }
-
+    
     public function index(): void
     {
         $this->isAuth();
@@ -63,56 +81,6 @@ class BankAccount extends Base
         $accounts = $this->repository->findByUser($this->getCurrentUserId());
 
         $this->renderPage("accounts", "headerFooter", ['accounts' => $accounts]);
-    }
-
-    public function show(int $id): void
-    {
-        $this->isAuth();
-
-        $account = $this->repository->findById($id);
-
-        if (!$account) {
-            return;
-        }
-
-        $this->renderPage("account", "headerFooter", ['account' => $account]);
-    }
-
-    public function update(int $id): void
-    {
-        $this->isAuth();
-
-        if (
-            !empty($_POST["short_name"]) &&
-            !empty($_POST["annual_interest_rate"]) &&
-            !empty($_POST["tax_rate"]) &&
-            !empty($_POST["solde"])
-        ) {
-            $account = new Account();
-            $account->setId($id);
-            $account->setShortName($_POST['short_name']);
-            $account->setDescription($_POST['description'] ?? '');
-            $account->setAnnualInterestRate((float) $_POST['annual_interest_rate']);
-            $account->setTaxRate((float) $_POST['tax_rate']);
-            $account->setSolde((float) $_POST['solde']);
-
-            $success = $this->repository->update($account);
-
-            if ($success) {
-                // Redirection
-            }
-        }
-    }
-
-    public function destroy(int $id): void
-    {
-        $this->isAuth();
-
-        $success = $this->repository->destroy($id);
-
-        if ($success) {
-            // Redirection
-        }
     }
 
     public function renderAccounts(): void{
@@ -171,7 +139,7 @@ class BankAccount extends Base
     foreach ($transactions as $t) {
         $grouped[$t['start_date']][] = $t;
     }
-
+    
     $this->renderPage("accountDetails", "headerFooter", [
         'account'         => $account,
         'accountId'       => $accountId,
@@ -187,5 +155,85 @@ class BankAccount extends Base
         'categoryFilter'  => $categoryFilter,
     ]);
 }
+  
+  public function accountDelete(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: /dashboard');
+            exit();
+        }
+
+        $accountId     = $_POST['id'] ?? null;
+        $currentUserId = $this->getCurrentUserId();
+
+        if (!$accountId) {
+            $_SESSION['error_message'] = 'ID de compte invalide.';
+            header('Location: /dashboard');
+            exit();
+        }
+
+        $account = $this->repository->findById((int) $accountId);
+
+        if (!$account) {
+            header('Location: /dashboard');
+            exit();
+        }
+
+        if ((int) $account['user_id'] !== $currentUserId) {
+            header('Location: /dashboard');
+            exit();
+        }
+
+        $this->repository->destroy((int) $accountId);
+
+        header('Location: /accounts');
+        exit();
+    }
+
+    public function accountEdit(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: /dashboard');
+            exit();
+        }
+
+        $accountId     = $_POST['id'] ?? null;
+        $currentUserId = $this->getCurrentUserId();
+
+        if (!$accountId) {
+            header('Location: /dashboard');
+            exit();
+        }
+
+        $existing = $this->repository->findById((int) $accountId);
+
+        if (!$existing) {
+            header('Location: /dashboard');
+            exit();
+        }
+
+        if ((int) $existing['user_id'] !== $currentUserId) {
+            header('Location: /dashboard');
+            exit();
+        }
+
+        $account = new Account();
+        $account->setId((int) $accountId);
+        $account->setShortName($_POST['short_name']);
+        $account->setDescription($_POST['description'] ?? '');
+        $account->setAnnualInterestRate((float) $_POST['annual_interest_rate']);
+        $account->setTaxRate((float) $_POST['tax_rate']);
+
+        $updated = $this->repository->update($account);
+
+        if ($updated) {
+            $_SESSION['success_message'] = 'Le compte bancaire a été mis à jour avec succès.';
+        } else {
+            $_SESSION['error_message'] = 'Une erreur est survenue lors de la mise à jour du compte.';
+        }
+
+        header('Location: /accounts');
+        exit();
+    }
 }
 
