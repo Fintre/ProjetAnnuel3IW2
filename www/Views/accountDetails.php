@@ -59,9 +59,8 @@
         </section>
 
         <section class="acdetail-head screen-size">
-            <span class="acdetail-head-tag"><?= $filteredCount ?> TRANSACTIONS</span>
             <div class="acdetail-head-row">
-                <h1 class="acdetail-head-title">Mouvements.</h1>
+                <h1 class="acdetail-head-title">Opériations</h1>
                 <button type="button" class="acdetail-head-cta" onclick="document.getElementById('modal-add-transaction').classList.add('acdetail-modal--open')">+ Ajouter une transaction</button>
             </div>
         </section>
@@ -141,8 +140,7 @@
                         <div class="acdetail-group-label"><?= formatDateLabel($date, $frDays, $frMonths) ?></div>
                         <?php foreach ($rows as $t): ?>
                             <div class="acdetail-row">
-        <span class="acdetail-row-date"><?= (int)date('j', strtotime($t['start_date'])) ?> ...</span>
-        <span class="acdetail-row-libelle"><?= htmlspecialchars($t['short_name']) ?></span>
+<span class="acdetail-row-date"><?= (int)date('j', strtotime($t['start_date'])) ?></span>        <span class="acdetail-row-libelle"><?= htmlspecialchars($t['short_name']) ?></span>
         <span class="acdetail-row-cat">
     <span class="acdetail-badge <?= categoryClass($t['category'] ?? null) ?>"><?= htmlspecialchars($t['category'] ?? '') ?></span>    </span>
     <span class="acdetail-row-amount <?= $t['type'] === 'income' ? 'acdetail-row-amount--pos' : 'acdetail-row-amount--neg' ?>">
