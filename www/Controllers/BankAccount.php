@@ -114,10 +114,12 @@ class BankAccount extends Base
     sort($categories);
 
     // 8. Regroupement par date — clé renommée de 'date' à 'start_date'
-    $grouped = [];
-    foreach ($transactions as $t) {
-        $grouped[$t['start_date']][] = $t;
-    }
+    usort($transactions, fn($a, $b) => strcmp($b['start_date'], $a['start_date']));
+
+$grouped = [];
+foreach ($transactions as $t) {
+    $grouped[$t['start_date']][] = $t;
+}
     
     $this->renderPage("accountDetails", "headerFooter", [
         'account'         => $account,
