@@ -46,17 +46,21 @@ public function create(): void
         exit;
     }
 
-    $transaction = new TransactionModel();
-    $transaction->setAccountId($accountId);
-    $transaction->setType($_POST['type']); // 'expense' ou 'income'
-    $transaction->setShortName($_POST['short_name']);
-    $transaction->setDescription($_POST['description'] ?? '');
-    $transaction->setCategory($_POST['category'] ?? null);
-    $transaction->setFrequency($_POST['frequency'] ?? 'ONE_TIME'); // ONE_TIME ou RECURRING
-    $transaction->setIntervalMonths((int) ($_POST['interval_months'] ?? 1));
-    $transaction->setAmount((float) $_POST['amount']);
-    $transaction->setStartDate($_POST['start_date']);
-    $transaction->setEndDate(!empty($_POST['end_date']) ? $_POST['end_date'] : null);
+$transaction = new TransactionModel();
+$transaction->setAccountId($accountId);
+$transaction->setType($_POST['type']); // 'expense' ou 'income'
+$transaction->setShortName($_POST['short_name']);
+$transaction->setDescription($_POST['description'] ?? '');
+$transaction->setCategory($_POST['category'] ?? null);
+$frequency = $_POST['frequency'] ?? 'ONE_TIME'; // ONE_TIME ou RECURRING
+$transaction->setFrequency($frequency);
+$transaction->setIntervalMonths((int) ($_POST['interval_months'] ?? 1));
+$transaction->setAmount((float) $_POST['amount']);
+$startDate = $frequency === 'RECURRING'
+    ? (!empty($_POST['recurrence_start_date']) ? $_POST['recurrence_start_date'] : date('Y-m-d'))
+    : (!empty($_POST['start_date']) ? $_POST['start_date'] : date('Y-m-d'));
+$transaction->setStartDate($startDate);
+$transaction->setEndDate(!empty($_POST['end_date']) ? $_POST['end_date'] : null);
 
     error_log('POST DATA: ' . json_encode($_POST));
 

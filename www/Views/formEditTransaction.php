@@ -59,8 +59,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">Modifier</button>
-                <a href="/transactions?account_id=<?= $transaction['account_id'] ?>" class="btn btn-secondary">Annuler</a>
-            </form>
+<a href="/accountDetails?id=<?= $transaction['account_id'] ?>" class="btn btn-secondary">Annuler</a>            </form>
         </div>
     </div>
 </div>

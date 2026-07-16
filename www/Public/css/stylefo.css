@@ -3095,7 +3095,7 @@ header {
 
 .acdetail-table-head {
   display: grid;
-  grid-template-columns: 8rem 1fr 12rem 10rem;
+  grid-template-columns: 8rem 1fr 12rem 10rem 6rem;
   padding: 0 0 0.75rem;
   border-bottom: 1px solid var(--line);
 }
@@ -3128,7 +3128,7 @@ header {
 
 .acdetail-row {
   display: grid;
-  grid-template-columns: 8rem 1fr 12rem 10rem;
+  grid-template-columns: 8rem 1fr 12rem 10rem 6rem;
   align-items: center;
   padding: 1rem 0;
   border-top: 1px solid var(--line-2);
@@ -3207,6 +3207,52 @@ header {
   background-color: transparent;
   border: 1px solid var(--line);
   color: var(--ink);
+}
+
+.acdetail-row-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.4rem;
+}
+.acdetail-row-actions form {
+  display: inline-flex;
+  margin: 0;
+}
+.acdetail-row-btn {
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 0.3rem;
+  width: 1.8rem;
+  height: 1.8rem;
+  padding: 0;
+  margin: 0;
+  font-size: 0.9rem;
+  font-family: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-sizing: border-box;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--ink);
+  opacity: 0.75;
+  transition: opacity 0.2s;
+}
+.acdetail-row-btn:hover {
+  opacity: 1;
+}
+.acdetail-row-btn--delete:hover {
+  color: #c0392b;
+  border-color: #c0392b;
+}
+.acdetail-row-btn--edit:hover {
+  color: var(--forest);
+  border-color: var(--forest);
 }
 
 .acdetail-empty {
